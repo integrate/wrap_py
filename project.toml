@@ -1,0 +1,7 @@
+[build-system]
+requires = [ #какие пакеты должны быть установлены, чтоб процесс мог работать
+  "setuptools",
+  "wheel"
+]
+
+build-backend = "setuptools.build_meta" #пакет, непосредственно выполняющий сборку
