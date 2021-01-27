@@ -22,6 +22,7 @@ PICTURES_PATH_ALT = os.path.join(DATA_PATH_ALT, PICTURES_SUBFOLDER)
 SOUNDS_PATH_ALT = os.path.join(DATA_PATH_ALT, SOUNDS_SUBFOLDER)
 
 
-print("Wrap_py uses catalogs: ")
+print(_("Wrap_py uses this catalogs: "))
+
 print(DATA_PATH)
 print(DATA_PATH_ALT)
