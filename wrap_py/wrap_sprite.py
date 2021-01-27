@@ -20,13 +20,24 @@ def sprite_exists(id):
     return obj is not None
 
 
+def _prepare_sprite_type(sprite_type_name):
+    if wrap_base.sprite_type_manager.has_sprite_type_name(sprite_type_name):
+        return
+
+    st = sprite_type_factory.Sprite_type_factory.create_sprite_type_from_file(sprite_type_name,
+                                                                              settings.SPRITE_TYPES_PATH, False, False)
+    if not st:
+        st = sprite_type_factory.Sprite_type_factory.create_sprite_type_from_file(sprite_type_name,
+                                                                                  settings.SPRITE_TYPES_PATH_ALT, False, False)
+
+    if not st:
+        raise Exception(str(sprite_type_name) + " loading failed.")
+
+    wrap_base.sprite_type_manager.add_sprite_type(st, sprite_type_name)
+
 def add_sprite(sprite_type_name, x, y, visible=True, costume=None):
     # get sprite type
-    if not wrap_base.sprite_type_manager.has_sprite_type_name(sprite_type_name):
-        st = sprite_type_factory.Sprite_type_factory.create_sprite_type_from_file(sprite_type_name,
-                                                                                  settings.SPRITE_TYPES_PATH)
-        wrap_base.sprite_type_manager.add_sprite_type(st, sprite_type_name)
-
+    _prepare_sprite_type(sprite_type_name)
     sprite_type = wrap_base.sprite_type_manager.get_sprite_type_by_name(sprite_type_name)
     if not sprite_type:
         raise Exception(str(sprite_type_name) + " loading failed.")

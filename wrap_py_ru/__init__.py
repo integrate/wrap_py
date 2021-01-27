@@ -1,1 +1,0 @@
-from wrap_py_ru import programma
