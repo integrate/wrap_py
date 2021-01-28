@@ -1,5 +1,7 @@
 from wrap_py.wrap_sprite_utils import *
+from wrap_py._utils import error_decorator as error_decorator
 
+@error_decorator
 def change_sprite_costume(id, costume_name, save_moving_angle=False, apply_proc_size=True):
     sprite = _get_sprite_by_id(id)
     if hasattr(sprite, "set_costume"):

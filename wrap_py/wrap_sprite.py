@@ -3,6 +3,8 @@ from wrap_engine import  sprite_of_type, sprite_type_factory, sprite_text
 from wrap_py.wrap_sprite_utils import *
 from wrap_py.wrap_sprite_type import *
 
+from wrap_py._transl import translator as _
+from wrap_py._utils import error_decorator as error_decorator
 
 
 def _register_sprite(sprite):
@@ -31,10 +33,12 @@ def _prepare_sprite_type(sprite_type_name):
                                                                                   settings.SPRITE_TYPES_PATH_ALT, False, False)
 
     if not st:
-        raise Exception(str(sprite_type_name) + " loading failed.")
+        err = _("Sprite {sprite_type_name} loading failed!")
+        raise Exception( err.format(sprite_type_name = str(sprite_type_name)) )
 
     wrap_base.sprite_type_manager.add_sprite_type(st, sprite_type_name)
 
+@error_decorator
 def add_sprite(sprite_type_name, x, y, visible=True, costume=None):
     # get sprite type
     _prepare_sprite_type(sprite_type_name)
@@ -47,6 +51,7 @@ def add_sprite(sprite_type_name, x, y, visible=True, costume=None):
 
     return _register_sprite(sprite)
 
+@error_decorator
 def add_text(x, y, text, visible = True, font_name="Arial", font_size=20,
                  bold=False, italic=False, underline=False,
                  text_color=(0, 0, 0),
