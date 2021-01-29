@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wrap_py 0.1.2\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2021-01-28 18:38+0300\n"
+"POT-Creation-Date: 2021-01-30 02:37+0300\n"
 "PO-Revision-Date: 2021-01-28 13:41+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: ru_RU\n"
@@ -19,6 +19,51 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.9.0\n"
 
-msgid "Costume with name {costume_name} not found."
+msgid "Costume with name {costume_name} not found"
 msgstr "Костюм {costume_name} не найден."
+
+msgid "No costume config found."
+msgstr "Файл настроек костюма не найден."
+
+msgid "Config loading error"
+msgstr "Ошибка загрузка файла настроек"
+
+msgid "Costume config found."
+msgstr "Найден файл настроек костюма."
+
+msgid "Config reading error"
+msgstr "Ошибка чтения файла настроек"
+
+msgid "Remove color parameters not found"
+msgstr "Не найдены параметры удаления цвета"
+
+msgid "Remove color R is invalid"
+msgstr "Неправильный параметр удаления цвета R"
+
+msgid "Remove color G is invalid"
+msgstr "Неправильный параметр удаления цвета G"
+
+msgid "Remove color B is invalid"
+msgstr "Неправильный параметр удаления цвета B"
+
+msgid "Color threshold is invalid"
+msgstr "Неправильный порог удаления цвета"
+
+msgid "loading"
+msgstr "загрузка"
+
+msgid "Costume image file not found"
+msgstr "Файс с картинкой костюма {costume_name} не найден."
+
+msgid "Costume image must be a file. Not a directory."
+msgstr "Картина костюма должна быть файлом, а не папкой."
+
+msgid "Type dir not found"
+msgstr "Папка с типами не найдена."
+
+msgid "Type path must be a dir. Not a file."
+msgstr "Папка с типами должна быть папкой, а не файлом."
+
+msgid "Type costumes not found"
+msgstr "Не найдены костюма для этого типа спрайтов"
 

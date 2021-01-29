@@ -1,5 +1,7 @@
 import os
 
+ENGINE_NAME="wrap_engine"
+
 TRANSL_DOMAIN = "wrap_py"
 PACK_SOURCE_FOLDER = os.path.split(__file__)[0]
 TRANSLATIONS_FOLDER = os.path.join(PACK_SOURCE_FOLDER, "transl", "compiled")

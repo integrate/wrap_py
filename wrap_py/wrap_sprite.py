@@ -4,7 +4,7 @@ from wrap_py.wrap_sprite_utils import *
 from wrap_py.wrap_sprite_type import *
 
 from wrap_py._transl import translator as _
-from wrap_py._utils import error_decorator as error_decorator
+from wrap_py._error_handling import error_decorator as error_decorator
 
 
 def _register_sprite(sprite):
@@ -44,7 +44,8 @@ def add_sprite(sprite_type_name, x, y, visible=True, costume=None):
     _prepare_sprite_type(sprite_type_name)
     sprite_type = wrap_base.sprite_type_manager.get_sprite_type_by_name(sprite_type_name)
     if not sprite_type:
-        raise Exception(str(sprite_type_name) + " loading failed.")
+        err = _("Sprite {sprite_type_name} loading failed!")
+        raise Exception( err.format(sprite_type_name = str(sprite_type_name)) )
 
     # make sprite of sprite type
     sprite = sprite_of_type.Sprite_of_type(sprite_type, x, y, costume, visible)

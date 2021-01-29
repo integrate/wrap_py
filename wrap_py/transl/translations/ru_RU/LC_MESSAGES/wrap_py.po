@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wrap_py 0.1.2\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2021-01-28 18:38+0300\n"
+"POT-Creation-Date: 2021-01-30 02:37+0300\n"
 "PO-Revision-Date: 2021-01-28 13:41+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: ru_RU\n"
@@ -19,14 +19,36 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.9.0\n"
 
-msgid "Error!"
-msgstr "Ой.."
-
 msgid "Wrap_py uses these catalogs: "
 msgstr "Будем использовать эти папки для поиска:"
+
+msgid "module"
+msgstr "модуль"
+
+msgid "line of code"
+msgstr "строка кода"
+
+msgid "function"
+msgstr "функция"
+
+msgid "code"
+msgstr "код"
+
+msgid "error"
+msgstr "ошибка"
+
+msgid "call stack"
+msgstr "очередь запусков"
+
+msgid "division by zero"
+msgstr "деление на ноль"
 
 msgid "Sprite {sprite_type_name} loading failed!"
 msgstr "Не удалось загрузить спрайт {sprite_type_name}!"
 
-msgid "division by zero"
-msgstr "Деление на ноль"
+msgid "No sprite with id {sprite_id}"
+msgstr "Спрайт с ID {sprite_id} не найден"
+
+msgid "Sprite is not {sprite_type_name}"
+msgstr "Спрайт не является {sprite_type_name}!"
+
