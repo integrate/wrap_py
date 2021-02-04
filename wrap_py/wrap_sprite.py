@@ -1,10 +1,12 @@
-from wrap_py import  wrap_base, settings
 from wrap_engine import  sprite_of_type, sprite_type_factory, sprite_text
-from wrap_py.wrap_sprite_utils import *
-from wrap_py.wrap_sprite_type import *
 
+from wrap_py import  wrap_base, settings
+from wrap_py._wrap_sprite_utils import *
 from wrap_py._transl import translator as _
 from wrap_py._error_handling import error_decorator as error_decorator
+
+#we need it to make sprite type methods accessible from wrap_sprite module
+from wrap_py.wrap_sprite_type import *
 
 
 def _register_sprite(sprite):

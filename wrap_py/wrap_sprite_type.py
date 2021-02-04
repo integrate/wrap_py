@@ -1,4 +1,4 @@
-from wrap_py.wrap_sprite_utils import *
+from wrap_py._wrap_sprite_utils import *
 from wrap_py._error_handling import error_decorator as error_decorator
 
 @error_decorator

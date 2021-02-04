@@ -1,4 +1,4 @@
-from wrap_py.wrap_sprite_utils import *
+from wrap_py._wrap_sprite_utils import *
 from wrap_engine.sprite_text import Sprite_text
 
 def is_sprite_text(id):

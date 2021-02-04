@@ -74,6 +74,7 @@ def on_mouse_pressed(buttons, func, delay=100, control_keys=None):
 _on_quit_event_id = None
 def on_close_callback(**kwargs):
     exit()
+
 def on_close(func):
     global _on_quit_event_id
 
