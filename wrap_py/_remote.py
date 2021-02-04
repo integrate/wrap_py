@@ -1,4 +1,4 @@
-import rpyc, psutil, subprocess, os, sys
+import rpyc, subprocess, os, sys
 
 def _launch_server():
     CREATE_NEW_CONSOLE =  0x00000010
@@ -11,12 +11,11 @@ def _launch_server():
 
     ex_d = os.path.split(sys.executable)[0]
     ex_f = os.path.join(ex_d, "pythonw")
-    proc = subprocess.Popen([ex_f, f], creationflags=flags)
+
+    subprocess.Popen([ex_f, f], creationflags=flags)
 
 
 def init_remote():
-    import time
-
     try:
         conn = rpyc.connect('127.0.0.1', 18861)
     except:
