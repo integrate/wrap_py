@@ -1,7 +1,7 @@
-from wrap_py import wrap_app
+from wrap_py import app
 
 def ustanovit_fps(fps):
-    wrap_app.set_fps(fps)
+    app.set_fps(fps)
 
 def zapusk():
-    wrap_app.start()
+    app.start()

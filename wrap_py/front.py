@@ -15,3 +15,6 @@ def make_data_folders_alt():
 
 def start_server():
     server.start_server()
+
+def start_server_pipes():
+    server.start_server_pipes()

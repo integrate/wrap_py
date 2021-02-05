@@ -1,7 +1,7 @@
 from wrap_py import server_service, server_class
 from wrap_py import wrap_base, settings as st
 
-import threading
+import sys, threading
 
 
 def start_server():
@@ -19,5 +19,14 @@ def start_server():
         server.close()
 
 
+def start_server_pipes():
+    import rpyc
+    conn = rpyc.connect_stdpipes(service = server_service.MainService)
+    wrap_base.app.start_with_connection(conn)
+
 if __name__ == '__main__':
-    start_server()
+    args = sys.argv[1:]
+    if "--pipes" in args:
+        start_server_pipes()
+    else:
+        start_server()

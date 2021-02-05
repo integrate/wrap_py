@@ -26,9 +26,17 @@ from wrap_py import wrap_event as event
 from wrap_py import wrap_sprite as sprite
 from wrap_py import wrap_sprite_text as text_sprite
 
+#server types
+from wrap_py._remote import SERVER_TYPE_PIPES, SERVER_TYPE_NETWORK
+
 #reset local modules from remote
-def init_remote():
+def init_remote(server_type = SERVER_TYPE_PIPES):
     global world
     from wrap_py import _remote
-    world = _remote.conn.root.wrap_world
-    app = _remote.conn.root.wrap_app
+    conn = _remote.init_remote(server_type)
+    if not conn:
+        print(_("Server starting error"))
+        return
+
+    world = conn.root.wrap_world
+    app = conn.root.wrap_app
