@@ -5,20 +5,6 @@ import sys, inspect, os
 import colorama
 from colorama import Fore, Back, Style
 
-def error_decorator(orig_func):
-    def new_func(*args, **kwargs):
-        try:
-            return orig_func(*args, **kwargs)
-
-        except Exception as e:
-            errtext = str(e)
-            errt = type(e)
-
-        raise errt(errtext)
-
-    return new_func
-
-
 def get_tb_data(traceback):
     tb_data = {}
 

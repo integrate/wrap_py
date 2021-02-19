@@ -1,12 +1,16 @@
-from wrap_py import server_service, server_class
-from wrap_py import wrap_base, settings as st
-
 import sys, threading
+
+from wrap_py.server_class import RpycServer
+from wrap_py.server_service import MainService
+from wrap_py import settings as st
+
+#create main application
+from wrap_py import wrap_base
 
 
 def start_server():
     # construct RPyC server
-    server = server_class.RpycServer(app=wrap_base.app, service=server_service.MainService, hostname=st.SERVER_HOST_NAME, port=st.SERVER_PORT)
+    server = RpycServer(app=wrap_base.app, service=MainService, hostname=st.SERVER_HOST_NAME, port=st.SERVER_PORT)
 
     #start in another thread
     thr = threading.Thread(target=server.start)

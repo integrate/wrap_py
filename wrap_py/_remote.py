@@ -1,8 +1,15 @@
-import rpyc, subprocess, os, sys, time
+from wrap_py._transl import translator as _
+
+import rpyc, subprocess, os, sys, time, threading, time
+from rpyc import ClassicService
+
 from wrap_py import settings as st
 
 SERVER_TYPE_NETWORK = 1
 SERVER_TYPE_PIPES = 2
+
+def _is_debug_mode():
+    return sys.gettrace() is not None
 
 def _launch_server(script_params=[], popen_kwargs={}, pythonw = False, separate_process=False):
 
@@ -23,17 +30,19 @@ def _launch_server(script_params=[], popen_kwargs={}, pythonw = False, separate_
     ex_d = os.path.split(sys.executable)[0]
     ex_f = os.path.join(ex_d, python_name)
 
-    return subprocess.Popen([ex_f, f, *script_params], creationflags=flags, **popen_kwargs)
+    return subprocess.Popen([ex_f, f, *script_params], creationflags=flags, cwd=os.getcwd(), **popen_kwargs)
 
 
 def _init_remote_network():
+    config = {'allow_all_attrs':True}
+
     try:
-        conn = rpyc.connect(st.SERVER_HOST_NAME, st.SERVER_PORT, keepalive=True)
+        conn = rpyc.connect(st.SERVER_HOST_NAME, st.SERVER_PORT, keepalive=True, config=config)
     except:
         try:
-            _launch_server(separate_process=True, pythonw=False)
+            _launch_server(separate_process=True, pythonw=not _is_debug_mode())
             time.sleep(1)
-            conn = rpyc.connect(st.SERVER_HOST_NAME, st.SERVER_PORT, keepalive=True)
+            conn = rpyc.connect(st.SERVER_HOST_NAME, st.SERVER_PORT, keepalive=True, config=config)
         except:
             return False
 
@@ -53,7 +62,28 @@ def _init_remote_pipes():
     return conn
 
 def init_remote(server_type=SERVER_TYPE_PIPES):
+    import sys
     if server_type == SERVER_TYPE_NETWORK:
-        return _init_remote_network()
+        conn = _init_remote_network()
     elif server_type == SERVER_TYPE_PIPES:
-        return _init_remote_pipes()
+        conn = _init_remote_pipes()
+    else:
+        raise Exception(_("Unknown working mode!"))
+
+    # start server callback processing in another thread
+    thr = threading.Thread(target=_start_client(conn))
+    thr.start()
+
+    return conn
+
+def _start_client(conn):
+    def process_server_responses():
+        while not conn.closed:
+            try:
+                conn.serve(1/10, True)
+            except:
+                break
+
+            time.sleep(1 / 3)
+
+    return process_server_responses

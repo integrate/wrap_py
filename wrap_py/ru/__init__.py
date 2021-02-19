@@ -1,6 +1,3 @@
-import os
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
-
 #set module language
 import wrap_py
 from wrap_py import _transl
@@ -14,3 +11,7 @@ wrap_py.say_hi()
 
 #load modules for external usage
 from wrap_py.ru import programma
+
+#init application
+def podgotovka(tip_zapuska=wrap_py.SERVER_TYPE_THREAD):
+    wrap_py.init(tip_zapuska)

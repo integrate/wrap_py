@@ -1,6 +1,5 @@
 from wrap_py import wrap_base
 
-
 class wrap_app:
     @staticmethod
     def set_fps(fps):

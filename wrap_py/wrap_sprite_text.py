@@ -1,93 +1,108 @@
-from wrap_py._wrap_sprite_utils import *
+from wrap_py import _wrap_sprite_utils as wsu
 from wrap_engine.sprite_text import Sprite_text
 
-def is_sprite_text(id):
-    sprite = _get_sprite_by_id(id)
-    return isinstance(sprite, Sprite_text)
+class wrap_sprite_text():
+    @classmethod
+    def is_sprite_text(cls, id):
+        sprite = wsu._get_sprite_by_id(id)
+        return isinstance(sprite, Sprite_text)
 
-def get_font_name(id):
-    sprite = _get_sprite_by_id(id, Sprite_text)
-    return sprite.get_font_name()
+    @classmethod
+    def get_font_name(cls, id):
+        sprite = wsu._get_sprite_by_id(id, Sprite_text)
+        return sprite.get_font_name()
 
+    @classmethod
+    def set_font_name(cls, id, name):
+        sprite = wsu._get_sprite_by_id(id, Sprite_text)
+        return sprite.change_data(font_name=name)
 
-def set_font_name(id, name):
-    sprite = _get_sprite_by_id(id, Sprite_text)
-    return sprite.change_data(font_name=name)
+    @classmethod
+    def get_font_size(cls, id):
+        sprite = wsu._get_sprite_by_id(id, Sprite_text)
+        return sprite.get_font_size()
 
+    @classmethod
+    def set_font_size(cls, id, size):
+        sprite = wsu._get_sprite_by_id(id, Sprite_text)
+        return sprite.change_data(font_size=size)
 
-def get_font_size(id):
-    sprite = _get_sprite_by_id(id, Sprite_text)
-    return sprite.get_font_size()
+    @classmethod
+    def get_font_bold(cls, id):
+        sprite = wsu._get_sprite_by_id(id, Sprite_text)
+        return sprite.get_font_bold()
 
+    @classmethod
+    def set_font_bold(cls, id, bold):
+        sprite = wsu._get_sprite_by_id(id, Sprite_text)
+        return sprite.change_data(bold=bold)
 
-def set_font_size(id, size):
-    sprite = _get_sprite_by_id(id, Sprite_text)
-    return sprite.change_data(font_size=size)
+    @classmethod
+    def get_font_italic(cls, id):
+        sprite = wsu._get_sprite_by_id(id, Sprite_text)
+        return sprite.get_font_italic()
 
+    @classmethod
+    def set_font_italic(cls, id, italic):
+        sprite = wsu._get_sprite_by_id(id, Sprite_text)
+        return sprite.change_data(italic=italic)
 
-def get_font_bold(id):
-    sprite = _get_sprite_by_id(id, Sprite_text)
-    return sprite.get_font_bold()
+    @classmethod
+    def get_font_underline(cls, id):
+        sprite = wsu._get_sprite_by_id(id, Sprite_text)
+        return sprite.get_font_underline()
 
+    @classmethod
+    def set_font_underline(cls, id, underline):
+        sprite = wsu._get_sprite_by_id(id, Sprite_text)
+        return sprite.change_data(underline=underline)
 
-def set_font_bold(id, bold):
-    sprite = _get_sprite_by_id(id, Sprite_text)
-    return sprite.change_data(bold=bold)
+    @classmethod
+    def get_text(cls, id):
+        sprite = wsu._get_sprite_by_id(id, Sprite_text)
+        return sprite.get_text()
 
+    @classmethod
+    def set_text(cls, id, text):
+        sprite = wsu._get_sprite_by_id(id, Sprite_text)
+        return sprite.change_data(text=text)
 
-def get_font_italic(id):
-    sprite = _get_sprite_by_id(id, Sprite_text)
-    return sprite.get_font_italic()
+    @classmethod
+    def get_text_color(cls, id):
+        sprite = wsu._get_sprite_by_id(id, Sprite_text)
+        return sprite.get_text_color()
 
-def set_font_italic(id, italic):
-    sprite = _get_sprite_by_id(id, Sprite_text)
-    return sprite.change_data(italic=italic)
+    @classmethod
+    def set_text_color(cls, id, text_color):
+        sprite = wsu._get_sprite_by_id(id, Sprite_text)
+        return sprite.change_data(text_color=text_color)
 
-def get_font_underline(id):
-    sprite = _get_sprite_by_id(id, Sprite_text)
-    return sprite.get_font_underline()
+    @classmethod
+    def get_back_color(cls, id):
+        sprite = wsu._get_sprite_by_id(id, Sprite_text)
+        return sprite.get_back_color()
 
-def set_font_underline(id, underline):
-    sprite = _get_sprite_by_id(id, Sprite_text)
-    return sprite.change_data(underline=underline)
+    @classmethod
+    def set_back_color(cls, id, back_color):
+        sprite = wsu._get_sprite_by_id(id, Sprite_text)
+        return sprite.change_back_color(back_color)
 
-def get_text(id):
-    sprite = _get_sprite_by_id(id, Sprite_text)
-    return sprite.get_text()
+    @classmethod
+    def get_pos(cls, id):
+        sprite = wsu._get_sprite_by_id(id, Sprite_text)
+        return sprite.get_pos()
 
-def set_text(id, text):
-    sprite = _get_sprite_by_id(id, Sprite_text)
-    return sprite.change_data(text=text)
+    @classmethod
+    def set_pos(cls, id, pos):
+        sprite = wsu._get_sprite_by_id(id, Sprite_text)
+        return sprite.change_pos(pos)
 
-def get_text_color(id):
-    sprite = _get_sprite_by_id(id, Sprite_text)
-    return sprite.get_text_color()
+    @classmethod
+    def get_angle(cls, id):
+        sprite = wsu._get_sprite_by_id(id, Sprite_text)
+        return sprite.get_angle()
 
-def set_text_color(id, text_color):
-    sprite = _get_sprite_by_id(id, Sprite_text)
-    return sprite.change_data(text_color=text_color)
-
-def get_back_color(id):
-    sprite = _get_sprite_by_id(id, Sprite_text)
-    return sprite.get_back_color()
-
-def set_back_color(id, back_color):
-    sprite = _get_sprite_by_id(id, Sprite_text)
-    return sprite.change_back_color(back_color)
-
-def get_pos(id):
-    sprite = _get_sprite_by_id(id, Sprite_text)
-    return sprite.get_pos()
-
-def set_pos(id, pos):
-    sprite = _get_sprite_by_id(id, Sprite_text)
-    return sprite.change_pos(pos)
-
-
-def get_angle(id):
-    sprite = _get_sprite_by_id(id, Sprite_text)
-    return sprite.get_angle()
-
-def set_angle(id, pos):
-    sprite = _get_sprite_by_id(id, Sprite_text)
-    return sprite.change_angle(pos)
+    @classmethod
+    def set_angle(cls, id, pos):
+        sprite = wsu._get_sprite_by_id(id, Sprite_text)
+        return sprite.change_angle(pos)

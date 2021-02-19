@@ -1,6 +1,5 @@
 from wrap_py import  wrap_base
 
-
 class wrap_world():
 
     @staticmethod
@@ -14,6 +13,10 @@ class wrap_world():
     @staticmethod
     def set_world_background_color(color):
         wrap_base.world.set_world_background_color(color)
+
+    @staticmethod
+    def set_world_background_color_rgb(r, g, b):
+        wrap_base.world.set_world_background_color([r, g, b])
 
     @staticmethod
     def set_world_background_image(path_to_file, fill=False):
