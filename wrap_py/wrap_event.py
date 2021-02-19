@@ -1,9 +1,21 @@
 import pygame
 from wrap_py import wrap_base as wb
 
+#anyone can assign hook in form func(callback).
+#It will be called with func that going to be set as event handler.
+#Result of func will be set as event handler instead of original func.
+event_handler_hook = None
+
 
 def _register_event_handler(func, delay=None, count=0, pygame_event_type_filter_data=None, key_codes=None,
                             control_keys=None, mouse_buttons=None):
+
+    #call event handler hook
+    if callable(event_handler_hook):
+        patched_func = event_handler_hook(func)
+    else:
+        patched_func = func
+
     # start event notification
     event_type_id = wb.event_generator.start_event_notification(
         delay=delay, count=count, force_new=True,
@@ -13,7 +25,7 @@ def _register_event_handler(func, delay=None, count=0, pygame_event_type_filter_
         mouse_buttons=mouse_buttons
     )
 
-    subs = wb.message_broker.Subscriber(event_type_id, func)
+    subs = wb.message_broker.Subscriber(event_type_id, patched_func, func)
     wb.broker.subscribe(subs)
 
     return event_type_id
@@ -57,7 +69,7 @@ class wrap_event():
                 not hasattr(control_keys, "__iter__"):
             control_keys = [control_keys]
 
-        return cls._register_event_handler(
+        return _register_event_handler(
             func=func,
             delay=delay,
             key_codes=keys,

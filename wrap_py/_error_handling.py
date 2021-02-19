@@ -37,15 +37,12 @@ def get_traceback_list(traceback):
 
 
 def filter_traceback_list(tb_list):
-    # filter out last error handler entry
-    this_module_name = __name__.split(".")[-1]
-    tb_data = tb_list[-1]
-    if tb_data['module_name'] == this_module_name:
-        del tb_list[-1]
 
-    #filterout wrap_engine frames
+     #filterout anything but launcher project
+    project_path = os.getcwd()
+
     for tb_data in tb_list.copy():
-        if tb_data['function'].startswith(settings.ENGINE_NAME):
+        if not tb_data['filename'].startswith(project_path):
             tb_list.remove(tb_data)
 
     return tb_list
@@ -55,7 +52,10 @@ def make_console_link_to_code(filename, lineno):
     return "File \"" + str(filename) + "\", line " + str(lineno)
 
 
-def python_error_hook(type, value, traceback):
+def python_error_hook(type, value, traceback, thread = None):
+    if type is SystemExit:
+        return
+
     colorama.init()
 
     w_module = _("module")
@@ -92,3 +92,7 @@ def python_error_hook(type, value, traceback):
     print(Fore.RED)
     print(w_error.capitalize() + ":", Fore.GREEN, Style.BRIGHT, _(str(value)).strip())
     print(Fore.RED + Back.RESET + "".rjust(100, "-"))
+
+
+def threading_error_hook(args):
+    python_error_hook(*args)
