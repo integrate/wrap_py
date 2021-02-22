@@ -27,6 +27,8 @@ event = wrap_event.wrap_event
 sprite = wrap_sprite.wrap_sprite
 text_sprite = wrap_sprite_text.wrap_sprite_text
 
+# easy registration of event handlers
+from wrap_py._event_handler_registrator import *
 
 # server types
 SERVER_TYPE_LOCAL = 1000
@@ -34,8 +36,6 @@ SERVER_TYPE_THREAD = 1001
 
 # reset local modules by remote
 _initialized = False
-
-
 def init(server_type=SERVER_TYPE_THREAD):
     global _initialized
     # reset submodules
@@ -52,8 +52,6 @@ def init(server_type=SERVER_TYPE_THREAD):
         event = wrap_event.wrap_event
         sprite = wrap_sprite.wrap_sprite
         text_sprite = wrap_sprite_text.wrap_sprite_text
-        _initialized = True
-        return
 
     #server in other thread
     if server_type== SERVER_TYPE_THREAD:
@@ -65,14 +63,13 @@ def init(server_type=SERVER_TYPE_THREAD):
         world, app, event, sprite, text_sprite = res['patched_interfaces']
         wrap_event.event_handler_hook = res['callback_func_patcher']
 
-        _initialized = True
-        return
 
+    wrap_py._event_handler_registrator._reset_global_interfaces()
+    _initialized = True
 
 
 
 from wrap_py import settings as st
-
 
 def say_hi():
     print()

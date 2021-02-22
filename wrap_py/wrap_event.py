@@ -36,7 +36,23 @@ def _stop_listening(event_type_id):
 
 class wrap_event():
 
-    # general subscriber
+
+    #pygame event filter:
+    #{pygame_event_attr: pygame_event_attr_val, ...} or
+    #{pygame_event_attr: [pygame_event_attr_val], ...}
+    #if attr not exists in event - filter not passed
+    #if attr value not equals event value - filter not passed OR
+    # if attr value not in event value list - filter not passed
+    #
+    # example:
+    #{'type': pygame.KEYDOWN, 'key': [pygame.K_UP, pygame.K_w]}
+    # filter only will work on keydown of key Up or 'w'
+    @staticmethod
+    def register_event_handler(func, delay=None, count=0, pygame_event_type_filter_data=None, key_codes=None,
+                            control_keys=None, mouse_buttons=None):
+        return _register_event_handler(func, delay, count, pygame_event_type_filter_data, key_codes,
+                            control_keys, mouse_buttons)
+
     @staticmethod
     def stop_listening(event_type_id):
         _stop_listening(event_type_id)
