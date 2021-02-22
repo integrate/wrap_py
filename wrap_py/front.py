@@ -1,4 +1,4 @@
-from wrap_py import settings, server
+from wrap_py import settings
 import pathlib
 
 def make_data_folders():
@@ -12,9 +12,3 @@ def make_data_folders_alt():
     pathlib.Path(settings.BACKGROUNDS_PATH_ALT).mkdir(parents=True, exist_ok=True)
     pathlib.Path(settings.PICTURES_PATH_ALT).mkdir(parents=True, exist_ok=True)
     pathlib.Path(settings.SOUNDS_PATH_ALT).mkdir(parents=True, exist_ok=True)
-
-def start_server():
-    server.start_server()
-
-def start_server_pipes():
-    server.start_server_pipes()
