@@ -9,7 +9,6 @@ from wrap_py import wrap_base, settings
 
 from wrap_py import _wrap_sprite_utils as wsu
 
-
 class wrap_sprite():
     @classmethod
     def _register_sprite(cls, sprite):

@@ -1,3 +1,5 @@
+import time
+
 from wrap_py import wrap_base
 from wrap_py._transl import translator as _
 
