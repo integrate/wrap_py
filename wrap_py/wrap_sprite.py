@@ -159,6 +159,18 @@ class wrap_sprite():
         return wsu._get_sprite_by_id(id).get_final_angle()
 
     @classmethod
+    def get_sprite_pos(cls, id):
+        return wsu._get_sprite_by_id(id).get_sprite_pos()
+
+    @classmethod
+    def get_sprite_x(cls, id):
+        return wsu._get_sprite_by_id(id).get_sprite_pos()[0]
+
+    @classmethod
+    def get_sprite_y(cls, id):
+        return wsu._get_sprite_by_id(id).get_sprite_pos()[1]
+
+    @classmethod
     def move_sprite_to(cls, id, x, y):
         return wsu._get_sprite_by_id(id).move_sprite_to(x, y)
 
