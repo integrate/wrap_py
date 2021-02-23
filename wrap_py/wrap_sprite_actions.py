@@ -270,17 +270,80 @@ class wrap_sprite_actions():
         )
 
     @classmethod
-    def move_sprite_at_angle(cls, id, angle, distance):
-        pass
+    def move_sprite_at_angle(cls, id, time_ms, angle, distance):
+        start_x, start_y = sprite.get_sprite_pos(id)
+        x, y = sprite.calc_point_by_angle_and_distance(id, angle, distance)
+        cls._make_calls_with_delay(
+            sprite.move_sprite_to,
+            {"id": id},
+
+            {"x": {"start": start_x, "stop": x},
+             "y": {"start": start_y, "stop": y}
+             },
+            time_ms, cls.mult_fps
+        )
 
     @classmethod
-    def move_sprite_to_angle(cls, id, distance):
-        pass
+    def move_sprite_to_angle(cls, id, time_ms, distance):
+        start_x, start_y = sprite.get_sprite_pos(id)
+        angle = sprite.get_sprite_final_angle(id)
+        x, y = sprite.calc_point_by_angle_and_distance(id, angle, distance)
+        cls._make_calls_with_delay(
+            sprite.move_sprite_to,
+            {"id": id},
+
+            {"x": {"start": start_x, "stop": x},
+             "y": {"start": start_y, "stop": y}
+             },
+            time_ms, cls.mult_fps
+        )
 
     @classmethod
-    def move_sprite_to_point(cls, id, x, y, distance):
-        pass
+    def move_sprite_to_point(cls, id, time_ms, x, y, distance):
+        start_x, start_y = sprite.get_sprite_pos(id)
+        angle = sprite.calc_angle_by_point(id, [x, y])
+        if angle is None:
+            return
+
+        x, y = sprite.calc_point_by_angle_and_distance(id, angle, distance)
+        cls._make_calls_with_delay(
+            sprite.move_sprite_to,
+            {"id": id},
+
+            {"x": {"start": start_x, "stop": x},
+             "y": {"start": start_y, "stop": y}
+             },
+            time_ms, cls.mult_fps
+        )
 
     @classmethod
-    def rotate_to_point(cls, id, x, y):
-        pass
+    def rotate_to_angle(cls, id, time_ms, angle_to_look_to):
+        angle_modif = sprite.calc_angle_modification_by_angle(id, angle_to_look_to)
+
+        cls._make_calls_with_delay(
+            sprite.set_sprite_angle,
+            {"id": id},
+
+            {"angle":
+                 {"start": sprite.get_sprite_angle(id), "stop": angle_modif}
+             },
+            time_ms, cls.mult_fps
+        )
+
+    @classmethod
+    def rotate_to_point(cls, id, time_ms, x, y):
+        angle_to_look_to = sprite.calc_angle_by_point(id, [x, y])
+        if angle_to_look_to is None:
+            return
+
+        angle_modif = sprite.calc_angle_modification_by_angle(id, angle_to_look_to)
+
+        cls._make_calls_with_delay(
+            sprite.set_sprite_angle,
+            {"id": id},
+
+            {"angle":
+                 {"start": sprite.get_sprite_angle(id), "stop": angle_modif}
+             },
+            time_ms, cls.mult_fps
+        )

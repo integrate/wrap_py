@@ -9,6 +9,7 @@ from wrap_py import wrap_base, settings
 
 from wrap_py import _wrap_sprite_utils as wsu
 
+
 class wrap_sprite():
     @classmethod
     def _register_sprite(cls, sprite):
@@ -63,7 +64,8 @@ class wrap_sprite():
                  bold=False, italic=False, underline=False,
                  text_color=(0, 0, 0),
                  back_color=None):
-        sprite = Sprite_text(x, y, visible, text, font_name, font_size, bold, italic, underline, text_color, back_color)
+        sprite = Sprite_text(x, y, visible, text, font_name, font_size, bold, italic, underline, text_color, back_color,
+                             angle=90)
         return cls._register_sprite(sprite)
 
     @classmethod
@@ -239,6 +241,19 @@ class wrap_sprite():
         wsu._get_sprite_by_id(id).set_visible(False)
 
     @classmethod
+    def calc_point_by_angle_and_distance(cls, id, angle, distance):
+        return wsu._get_sprite_by_id(id).calc_point_by_angle_and_distance(angle, distance)
+
+    @classmethod
+    def calc_angle_by_point(cls, id, point):
+        return wsu._get_sprite_by_id(id).calc_angle_by_point(point)
+
+    @classmethod
+    def calc_angle_modification_by_angle(cls, id, angle_to_look_to):
+        return wsu._get_sprite_by_id(id).calc_angle_modification_by_angle(angle_to_look_to)
+
+
+    @classmethod
     def move_sprite_at_angle(cls, id, angle, distance):
         wsu._get_sprite_by_id(id).move_sprite_at_angle(angle, distance)
 
@@ -249,6 +264,10 @@ class wrap_sprite():
     @classmethod
     def move_sprite_to_point(cls, id, x, y, distance):
         wsu._get_sprite_by_id(id).move_sprite_to_point([x, y], distance)
+
+    @classmethod
+    def rotate_to_angle(cls, id, angle_to_look_to):
+        wsu._get_sprite_by_id(id).rotate_to_angle(angle_to_look_to)
 
     @classmethod
     def rotate_to_point(cls, id, x, y):
