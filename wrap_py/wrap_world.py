@@ -3,7 +3,8 @@ from wrap_py import  wrap_base
 class wrap_world():
 
     @staticmethod
-    def create_world(width, height):
+    def create_world(width:int, height:int):
+        """Creates screen with given sizes"""
         wrap_base.world.create_world(width, height)
 
     @staticmethod
