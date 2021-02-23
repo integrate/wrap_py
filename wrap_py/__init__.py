@@ -79,3 +79,6 @@ def say_hi():
     print(_("Wrap_py uses these catalogs: "))
     print(st.DATA_PATH)
     print(st.DATA_PATH_ALT)
+
+    print(_("Check this link to find sprites: ")+str(st.DATA_DOWNLOAD_URL))
+

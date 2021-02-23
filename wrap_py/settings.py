@@ -10,6 +10,7 @@ DATA_CATALOG_NAME = "wrap_py_catalog"
 
 DATA_PATH = os.path.abspath( os.path.join(os.path.expanduser("~"), DATA_CATALOG_NAME) )
 DATA_PATH_ALT = os.path.abspath(DATA_CATALOG_NAME)
+DATA_DOWNLOAD_URL = "https://www.dropbox.com/sh/22gphub8unhhfhq/AABNuScUjnI23D63LbFPqehva?dl=0"
 
 SPRITES_TYPES_SUBFOLDER="sprite_types"
 BACKGROUNDS_SUBFOLDER="backgrounds"

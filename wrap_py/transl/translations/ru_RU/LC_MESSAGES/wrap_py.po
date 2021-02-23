@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wrap_py 0.1.2\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2021-01-30 02:37+0300\n"
+"POT-Creation-Date: 2021-02-23 23:58+0300\n"
 "PO-Revision-Date: 2021-01-28 13:41+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: ru_RU\n"
@@ -21,6 +21,9 @@ msgstr ""
 
 msgid "Wrap_py uses these catalogs: "
 msgstr "Будем использовать эти папки для поиска:"
+
+msgid "Check this link to find sprites: "
+msgstr "По этой ссылке можно скачать спрайты: "
 
 msgid "module"
 msgstr "модуль"
@@ -43,12 +46,12 @@ msgstr "очередь запусков"
 msgid "division by zero"
 msgstr "деление на ноль"
 
-msgid "Sprite {sprite_type_name} loading failed!"
-msgstr "Не удалось загрузить спрайт {sprite_type_name}!"
-
 msgid "No sprite with id {sprite_id}"
 msgstr "Спрайт с ID {sprite_id} не найден"
 
 msgid "Sprite is not {sprite_type_name}"
 msgstr "Спрайт не является {sprite_type_name}!"
+
+msgid "Sprite {sprite_type_name} loading failed!"
+msgstr "Не удалось загрузить спрайт {sprite_type_name}!"
 

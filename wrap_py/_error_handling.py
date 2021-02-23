@@ -38,11 +38,16 @@ def get_traceback_list(traceback):
 
 def filter_traceback_list(tb_list):
 
-     #filterout anything but launcher project
+    #filterout anything but launcher project
     project_path = os.getcwd()
+    venv_path = os.path.join(project_path, "venv")
 
     for tb_data in tb_list.copy():
-        if not tb_data['filename'].startswith(project_path):
+        tb_path = os.path.normpath(tb_data['filename'])
+        if not tb_path.startswith(project_path):
+            tb_list.remove(tb_data)
+
+        if tb_path.startswith(venv_path):
             tb_list.remove(tb_data)
 
     return tb_list
