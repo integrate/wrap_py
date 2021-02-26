@@ -43,11 +43,11 @@ def on_key_once(orig_func_or_key, *other_keys):
     return on_key_handler
 
 
-def on_key_always(*keys):
+def on_key_always(*keys, delay=50):
     keys = [*keys]
 
     def on_key_handler(orig_func):
-        event.register_event_handler(orig_func, key_codes=keys, delay=100)
+        event.register_event_handler(orig_func, key_codes=keys, delay=delay)
         return orig_func
 
     return on_key_handler
