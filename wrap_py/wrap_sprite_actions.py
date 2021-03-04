@@ -55,8 +55,8 @@ class wrap_sprite_actions():
         ch_kw = {name: int(d['stop']) for (name, d) in changing_kwargs.items()}
         func(**fixed_kwargs, **ch_kw)
 
-    @classmethod
-    def change_sprite_size(cls, id, time_ms, width, height):
+    @staticmethod
+    def change_sprite_size(id, time_ms, width, height):
         start_width, start_height = sprite.get_sprite_size(id)
 
         f = sprite.change_sprite_size
@@ -67,8 +67,8 @@ class wrap_sprite_actions():
         }
         cls._make_calls_with_delay(f, fixkw, chkw, time_ms, cls.mult_fps)
 
-    @classmethod
-    def change_sprite_width(cls, id, time_ms, width):
+    @staticmethod
+    def change_sprite_width(id, time_ms, width):
         start_width = sprite.get_sprite_width(id)
 
         f = sprite.change_sprite_width
@@ -78,8 +78,8 @@ class wrap_sprite_actions():
         }
         cls._make_calls_with_delay(f, fixkw, chkw, time_ms, cls.mult_fps)
 
-    @classmethod
-    def change_sprite_height(cls, id, time_ms, height):
+    @staticmethod
+    def change_sprite_height(id, time_ms, height):
         start_height = sprite.get_sprite_height(id)
 
         f = sprite.change_sprite_height
@@ -89,8 +89,8 @@ class wrap_sprite_actions():
         }
         cls._make_calls_with_delay(f, fixkw, chkw, time_ms, cls.mult_fps)
 
-    @classmethod
-    def change_width_proportionally(cls, id, time_ms, width, from_modified=False):
+    @staticmethod
+    def change_width_proportionally(id, time_ms, width, from_modified=False):
         cls._make_calls_with_delay(
             sprite.change_width_proportionally,
             {"id": id,
@@ -103,8 +103,8 @@ class wrap_sprite_actions():
             time_ms, cls.mult_fps
         )
 
-    @classmethod
-    def change_height_proportionally(cls, id, time_ms, height, from_modified=False):
+    @staticmethod
+    def change_height_proportionally(id, time_ms, height, from_modified=False):
         cls._make_calls_with_delay(
             sprite.change_height_proportionally,
             {"id": id,
@@ -117,8 +117,8 @@ class wrap_sprite_actions():
             time_ms, cls.mult_fps
         )
 
-    @classmethod
-    def change_sprite_size_proc(cls, id, time_ms, width, height):
+    @staticmethod
+    def change_sprite_size_proc(id, time_ms, width, height):
         startw = sprite.get_sprite_width_proc(id)
         startw = startw if startw is not None else 100
 
@@ -137,8 +137,8 @@ class wrap_sprite_actions():
             time_ms, cls.mult_fps
         )
 
-    @classmethod
-    def change_sprite_width_proc(cls, id, time_ms, width):
+    @staticmethod
+    def change_sprite_width_proc(id, time_ms, width):
         startw = sprite.get_sprite_width_proc(id)
         startw = startw if startw is not None else 100
 
@@ -150,8 +150,8 @@ class wrap_sprite_actions():
             time_ms, cls.mult_fps
         )
 
-    @classmethod
-    def change_sprite_height_proc(cls, id, time_ms, height):
+    @staticmethod
+    def change_sprite_height_proc(id, time_ms, height):
         starth = sprite.get_sprite_height_proc(id)
         starth = starth if starth is not None else 100
 
@@ -165,8 +165,8 @@ class wrap_sprite_actions():
             time_ms, cls.mult_fps
         )
 
-    @classmethod
-    def set_sprite_angle(cls, id, time_ms, angle):
+    @staticmethod
+    def set_sprite_angle(id, time_ms, angle):
         cls._make_calls_with_delay(
             sprite.set_sprite_angle,
             {"id": id},
@@ -177,8 +177,8 @@ class wrap_sprite_actions():
             time_ms, cls.mult_fps
         )
 
-    @classmethod
-    def move_sprite_to(cls, id, time_ms, x, y):
+    @staticmethod
+    def move_sprite_to(id, time_ms, x, y):
         start_x, start_y = sprite.get_sprite_pos(id)
         cls._make_calls_with_delay(
             sprite.move_sprite_to,
@@ -190,8 +190,8 @@ class wrap_sprite_actions():
             time_ms, cls.mult_fps
         )
 
-    @classmethod
-    def move_sprite_by(cls, id, time_ms, dx, dy):
+    @staticmethod
+    def move_sprite_by(id, time_ms, dx, dy):
         start_x, start_y = sprite.get_sprite_pos(id)
         cls._make_calls_with_delay(
             sprite.move_sprite_to,
@@ -203,8 +203,8 @@ class wrap_sprite_actions():
             time_ms, cls.mult_fps
         )
 
-    @classmethod
-    def set_left_to(cls, id, time_ms, left):
+    @staticmethod
+    def set_left_to(id, time_ms, left):
         cls._make_calls_with_delay(
             sprite.set_left_to,
             {"id": id},
@@ -214,8 +214,8 @@ class wrap_sprite_actions():
             time_ms, cls.mult_fps
         )
 
-    @classmethod
-    def set_right_to(cls, id, time_ms, right):
+    @staticmethod
+    def set_right_to(id, time_ms, right):
         cls._make_calls_with_delay(
             sprite.set_right_to,
             {"id": id},
@@ -225,8 +225,8 @@ class wrap_sprite_actions():
             time_ms, cls.mult_fps
         )
 
-    @classmethod
-    def set_top_to(cls, id, time_ms, top):
+    @staticmethod
+    def set_top_to(id, time_ms, top):
         cls._make_calls_with_delay(
             sprite.set_top_to,
             {"id": id},
@@ -236,8 +236,8 @@ class wrap_sprite_actions():
             time_ms, cls.mult_fps
         )
 
-    @classmethod
-    def set_bottom_to(cls, id, time_ms, bottom):
+    @staticmethod
+    def set_bottom_to(id, time_ms, bottom):
         cls._make_calls_with_delay(
             sprite.set_bottom_to,
             {"id": id},
@@ -247,8 +247,8 @@ class wrap_sprite_actions():
             time_ms, cls.mult_fps
         )
 
-    @classmethod
-    def set_centerx_to(cls, id, time_ms, centerx):
+    @staticmethod
+    def set_centerx_to(id, time_ms, centerx):
         cls._make_calls_with_delay(
             sprite.set_centerx_to,
             {"id": id},
@@ -258,8 +258,8 @@ class wrap_sprite_actions():
             time_ms, cls.mult_fps
         )
 
-    @classmethod
-    def set_centery_to(cls, id, time_ms, centery):
+    @staticmethod
+    def set_centery_to(id, time_ms, centery):
         cls._make_calls_with_delay(
             sprite.set_centery_to,
             {"id": id},
@@ -269,8 +269,8 @@ class wrap_sprite_actions():
             time_ms, cls.mult_fps
         )
 
-    @classmethod
-    def move_sprite_at_angle(cls, id, time_ms, angle, distance):
+    @staticmethod
+    def move_sprite_at_angle(id, time_ms, angle, distance):
         start_x, start_y = sprite.get_sprite_pos(id)
         x, y = sprite.calc_point_by_angle_and_distance(id, angle, distance)
         cls._make_calls_with_delay(
@@ -283,8 +283,8 @@ class wrap_sprite_actions():
             time_ms, cls.mult_fps
         )
 
-    @classmethod
-    def move_sprite_to_angle(cls, id, time_ms, distance):
+    @staticmethod
+    def move_sprite_to_angle(id, time_ms, distance):
         start_x, start_y = sprite.get_sprite_pos(id)
         angle = sprite.get_sprite_final_angle(id)
         x, y = sprite.calc_point_by_angle_and_distance(id, angle, distance)
@@ -298,8 +298,8 @@ class wrap_sprite_actions():
             time_ms, cls.mult_fps
         )
 
-    @classmethod
-    def move_sprite_to_point(cls, id, time_ms, x, y, distance):
+    @staticmethod
+    def move_sprite_to_point(id, time_ms, x, y, distance):
         start_x, start_y = sprite.get_sprite_pos(id)
         angle = sprite.calc_angle_by_point(id, [x, y])
         if angle is None:
@@ -316,8 +316,8 @@ class wrap_sprite_actions():
             time_ms, cls.mult_fps
         )
 
-    @classmethod
-    def rotate_to_angle(cls, id, time_ms, angle_to_look_to):
+    @staticmethod
+    def rotate_to_angle(id, time_ms, angle_to_look_to):
         angle_modif = sprite.calc_angle_modification_by_angle(id, angle_to_look_to)
 
         cls._make_calls_with_delay(
@@ -330,8 +330,8 @@ class wrap_sprite_actions():
             time_ms, cls.mult_fps
         )
 
-    @classmethod
-    def rotate_to_point(cls, id, time_ms, x, y):
+    @staticmethod
+    def rotate_to_point(id, time_ms, x, y):
         angle_to_look_to = sprite.calc_angle_by_point(id, [x, y])
         if angle_to_look_to is None:
             return
@@ -347,3 +347,4 @@ class wrap_sprite_actions():
              },
             time_ms, cls.mult_fps
         )
+cls = wrap_sprite_actions

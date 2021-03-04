@@ -11,14 +11,14 @@ from wrap_py import _wrap_sprite_utils as wsu
 
 
 class wrap_sprite():
-    @classmethod
-    def _register_sprite(cls, sprite):
+    @staticmethod
+    def _register_sprite(sprite):
         id = wrap_base.sprite_id_manager.add_object(sprite)
         wrap_base.world.sprite_manager.add_image_sprite(sprite)
         return id
 
-    @classmethod
-    def _prepare_sprite_type(cls, sprite_type_name):
+    @staticmethod
+    def _prepare_sprite_type(sprite_type_name):
         if wrap_base.sprite_type_manager.has_sprite_type_name(sprite_type_name):
             return
 
@@ -34,19 +34,19 @@ class wrap_sprite():
 
         wrap_base.sprite_type_manager.add_sprite_type(st, sprite_type_name)
 
-    @classmethod
-    def remove_sprite(cls, id):
+    @staticmethod
+    def remove_sprite(id):
         obj = wrap_base.sprite_id_manager.remove_by_id(id)
         if obj is not None:
             wrap_base.world.sprite_manager.remove_image_sprite(obj)
 
-    @classmethod
-    def sprite_exists(cls, id):
+    @staticmethod
+    def sprite_exists(id):
         obj = wrap_base.sprite_id_manager.get_obj_id(id)
         return obj is not None
 
-    @classmethod
-    def add_sprite(cls, sprite_type_name, x, y, visible=True, costume=None):
+    @staticmethod
+    def add_sprite(sprite_type_name, x, y, visible=True, costume=None):
         # get sprite type
         cls._prepare_sprite_type(sprite_type_name)
         sprite_type = wrap_base.sprite_type_manager.get_sprite_type_by_name(sprite_type_name)
@@ -59,8 +59,8 @@ class wrap_sprite():
 
         return cls._register_sprite(sprite)
 
-    @classmethod
-    def add_text(cls, x, y, text, visible=True, font_name="Arial", font_size=20,
+    @staticmethod
+    def add_text(x, y, text, visible=True, font_name="Arial", font_size=20,
                  bold=False, italic=False, underline=False,
                  text_color=(0, 0, 0),
                  back_color=None):
@@ -68,220 +68,228 @@ class wrap_sprite():
                              angle=90)
         return cls._register_sprite(sprite)
 
-    @classmethod
-    def get_sprite_width(cls, id):
+    @staticmethod
+    def get_sprite_width(id):
         return wsu._get_sprite_by_id(id).get_width_pix()
 
-    @classmethod
-    def get_sprite_height(cls, id):
+    @staticmethod
+    def get_sprite_height(id):
         return wsu._get_sprite_by_id(id).get_height_pix()
 
-    @classmethod
-    def get_sprite_size(cls, id):
+    @staticmethod
+    def get_sprite_size(id):
         return wsu._get_sprite_by_id(id).get_size_pix()
 
-    @classmethod
-    def set_sprite_original_size(cls, id):
+    @staticmethod
+    def set_sprite_original_size(id):
         wsu._get_sprite_by_id(id).set_original_size()
 
-    @classmethod
-    def change_sprite_size(cls, id, width, height):
+    @staticmethod
+    def change_sprite_size(id, width, height):
         wsu._get_sprite_by_id(id).change_size_pix(int(width), int(height))
 
-    @classmethod
-    def change_sprite_width(cls, id, width):
+    @staticmethod
+    def change_sprite_width(id, width):
         wsu._get_sprite_by_id(id).change_width_pix(width)
 
-    @classmethod
-    def change_sprite_height(cls, id, height):
+    @staticmethod
+    def change_sprite_height(id, height):
         wsu._get_sprite_by_id(id).change_height_pix(height)
 
-    @classmethod
-    def change_width_proportionally(cls, id, width, from_modified=False):
+    @staticmethod
+    def change_width_proportionally(id, width, from_modified=False):
         wsu._get_sprite_by_id(id).change_width_pix_proportionally(width, from_modified)
 
-    @classmethod
-    def change_height_proportionally(cls, id, height, from_modified=False):
+    @staticmethod
+    def change_height_proportionally(id, height, from_modified=False):
         wsu._get_sprite_by_id(id).change_height_pix_proportionally(height, from_modified)
 
-    @classmethod
-    def get_sprite_width_proc(cls, id):
+    @staticmethod
+    def get_sprite_width_proc(id):
         return wsu._get_sprite_by_id(id).get_width_proc()
 
-    @classmethod
-    def get_sprite_height_proc(cls, id):
+    @staticmethod
+    def get_sprite_height_proc(id):
         return wsu._get_sprite_by_id(id).get_height_proc()
 
-    @classmethod
-    def get_sprite_size_proc(cls, id):
+    @staticmethod
+    def get_sprite_size_proc(id):
         return wsu._get_sprite_by_id(id).get_size_proc()
 
-    @classmethod
-    def change_sprite_size_proc(cls, id, width, height):
+    @staticmethod
+    def change_sprite_size_proc(id, width, height):
         wsu._get_sprite_by_id(id).change_size_proc(int(width), int(height))
 
-    @classmethod
-    def change_sprite_width_proc(cls, id, width):
+    @staticmethod
+    def change_sprite_width_proc(id, width):
         wsu._get_sprite_by_id(id).change_width_proc(width)
 
-    @classmethod
-    def change_sprite_height_proc(cls, id, height):
+    @staticmethod
+    def change_sprite_height_proc(id, height):
         wsu._get_sprite_by_id(id).change_height_proc(height)
 
-    @classmethod
-    def change_sprite_size_by_proc(cls, id, proc):
+    @staticmethod
+    def change_sprite_size_by_proc(id, proc):
         wsu._get_sprite_by_id(id).change_size_by_proc(proc)
 
-    @classmethod
-    def get_sprite_flipx_reverse(cls, id):
+    @staticmethod
+    def get_sprite_flipx_reverse(id):
         return wsu._get_sprite_by_id(id).get_flipx_reverse()
 
-    @classmethod
-    def get_sprite_flipy_reverse(cls, id):
+    @staticmethod
+    def get_sprite_flipy_reverse(id):
         return wsu._get_sprite_by_id(id).get_flipy_reverse()
 
-    @classmethod
-    def set_sprite_flipx_reverse(cls, id, flipx):
+    @staticmethod
+    def set_sprite_flipx_reverse(id, flipx):
         return wsu._get_sprite_by_id(id).set_flipx_reverse(flipx)
 
-    @classmethod
-    def set_sprite_flipy_reverse(cls, id, flipy):
+    @staticmethod
+    def set_sprite_flipy_reverse(id, flipy):
         return wsu._get_sprite_by_id(id).set_flipy_reverse(flipy)
 
-    @classmethod
-    def set_sprite_angle(cls, id, angle):
+    @staticmethod
+    def set_sprite_angle(id, angle):
         wsu._get_sprite_by_id(id).set_angle_modification(angle)
 
-    @classmethod
-    def get_sprite_angle(cls, id):
+    @staticmethod
+    def get_sprite_angle(id):
         return wsu._get_sprite_by_id(id).get_angle_modification()
 
-    @classmethod
-    def get_sprite_final_angle(cls, id):
+    @staticmethod
+    def get_sprite_final_angle(id):
         return wsu._get_sprite_by_id(id).get_final_angle()
 
-    @classmethod
-    def get_sprite_pos(cls, id):
+    @staticmethod
+    def get_sprite_pos(id):
         return wsu._get_sprite_by_id(id).get_sprite_pos()
 
-    @classmethod
-    def get_sprite_x(cls, id):
+    @staticmethod
+    def get_sprite_x(id):
         return wsu._get_sprite_by_id(id).get_sprite_pos()[0]
 
-    @classmethod
-    def get_sprite_y(cls, id):
+    @staticmethod
+    def get_sprite_y(id):
         return wsu._get_sprite_by_id(id).get_sprite_pos()[1]
 
-    @classmethod
-    def move_sprite_to(cls, id, x, y):
+    @staticmethod
+    def move_sprite_to(id, x, y):
         return wsu._get_sprite_by_id(id).move_sprite_to(x, y)
 
-    @classmethod
-    def move_sprite_by(cls, id, dx, dy):
+    @staticmethod
+    def move_sprite_by(id, dx, dy):
         wsu._get_sprite_by_id(id).move_sprite_by(dx, dy)
 
-    @classmethod
-    def get_left(cls, id):
+    @staticmethod
+    def get_left(id):
         return wsu._get_sprite_by_id(id).get_sprite_rect().left
 
-    @classmethod
-    def get_right(cls, id):
+    @staticmethod
+    def get_right(id):
         return wsu._get_sprite_by_id(id).get_sprite_rect().right
 
-    @classmethod
-    def get_top(cls, id):
+    @staticmethod
+    def get_top(id):
         return wsu._get_sprite_by_id(id).get_sprite_rect().top
 
-    @classmethod
-    def get_bottom(cls, id):
+    @staticmethod
+    def get_bottom(id):
         return wsu._get_sprite_by_id(id).get_sprite_rect().bottom
 
-    @classmethod
-    def get_centerx(cls, id):
+    @staticmethod
+    def get_centerx(id):
         return wsu._get_sprite_by_id(id).get_sprite_rect().centerx
 
-    @classmethod
-    def get_centery(cls, id):
+    @staticmethod
+    def get_centery(id):
         return wsu._get_sprite_by_id(id).get_sprite_rect().centery
 
-    @classmethod
-    def set_left_to(cls, id, left):
+    @staticmethod
+    def set_left_to(id, left):
         wsu._get_sprite_by_id(id).set_left_to(left)
 
-    @classmethod
-    def set_right_to(cls, id, right):
+    @staticmethod
+    def set_right_to(id, right):
         wsu._get_sprite_by_id(id).set_right_to(right)
 
-    @classmethod
-    def set_top_to(cls, id, top):
+    @staticmethod
+    def set_top_to(id, top):
         wsu._get_sprite_by_id(id).set_top_to(top)
 
-    @classmethod
-    def set_bottom_to(cls, id, bottom):
+    @staticmethod
+    def set_bottom_to(id, bottom):
         wsu._get_sprite_by_id(id).set_bottom_to(bottom)
 
-    @classmethod
-    def set_centerx_to(cls, id, centerx):
+    @staticmethod
+    def set_centerx_to(id, centerx):
         wsu._get_sprite_by_id(id).set_centerx_to(centerx)
 
-    @classmethod
-    def set_centery_to(cls, id, centery):
+    @staticmethod
+    def set_centery_to(id, centery):
         wsu._get_sprite_by_id(id).set_centery_to(centery)
 
-    @classmethod
-    def is_sprite_visible(cls, id):
+    @staticmethod
+    def is_sprite_visible(id):
         return wsu._get_sprite_by_id(id).get_visible()
 
-    @classmethod
-    def show_sprite(cls, id):
+    @staticmethod
+    def show_sprite(id):
         wsu._get_sprite_by_id(id).set_visible(True)
 
-    @classmethod
-    def hide_sprite(cls, id):
+    @staticmethod
+    def hide_sprite(id):
         wsu._get_sprite_by_id(id).set_visible(False)
 
-    @classmethod
-    def calc_point_by_angle_and_distance(cls, id, angle, distance):
+    @staticmethod
+    def calc_point_by_angle_and_distance(id, angle, distance):
         return wsu._get_sprite_by_id(id).calc_point_by_angle_and_distance(angle, distance)
 
-    @classmethod
-    def calc_angle_by_point(cls, id, point):
+    @staticmethod
+    def calc_angle_by_point(id, point):
         return wsu._get_sprite_by_id(id).calc_angle_by_point(point)
 
-    @classmethod
-    def calc_angle_modification_by_angle(cls, id, angle_to_look_to):
+    @staticmethod
+    def calc_angle_modification_by_angle(id, angle_to_look_to):
         return wsu._get_sprite_by_id(id).calc_angle_modification_by_angle(angle_to_look_to)
 
 
-    @classmethod
-    def move_sprite_at_angle(cls, id, angle, distance):
+    @staticmethod
+    def move_sprite_at_angle(id, angle, distance):
         wsu._get_sprite_by_id(id).move_sprite_at_angle(angle, distance)
 
-    @classmethod
-    def move_sprite_to_angle(cls, id, distance):
+    @staticmethod
+    def move_sprite_to_angle(id, distance):
         wsu._get_sprite_by_id(id).move_sprite_to_angle(distance)
 
-    @classmethod
-    def move_sprite_to_point(cls, id, x, y, distance):
+    @staticmethod
+    def move_sprite_to_point(id, x, y, distance):
         wsu._get_sprite_by_id(id).move_sprite_to_point([x, y], distance)
 
-    @classmethod
-    def rotate_to_angle(cls, id, angle_to_look_to):
+    @staticmethod
+    def rotate_to_angle(id, angle_to_look_to):
         wsu._get_sprite_by_id(id).rotate_to_angle(angle_to_look_to)
 
-    @classmethod
-    def rotate_to_point(cls, id, x, y):
+    @staticmethod
+    def rotate_to_point(id, x, y):
         wsu._get_sprite_by_id(id).rotate_to_point([x, y])
 
-    @classmethod
-    def sprites_collide(cls, id1, id2):
+    @staticmethod
+    def sprite_collide_point(id, x, y, use_rect = False):
+        sp = wsu._get_sprite_by_id(id)
+        if use_rect:
+            return sp.collide_point_rect(x, y)
+        else:
+            return sp.collide_point_mask(x, y)
+
+    @staticmethod
+    def sprites_collide(id1, id2):
         sp1 = wsu._get_sprite_by_id(id1)
         sp2 = wsu._get_sprite_by_id(id2)
         manager = wrap_base.get_sprite_manager()
         return manager.sprites_collide(sp1, sp2)
 
-    @classmethod
-    def sprites_collide_any(cls, sprite_id, sprite_id_list):
+    @staticmethod
+    def sprites_collide_any(sprite_id, sprite_id_list):
         sprite_list = wrap_base.sprite_id_manager.get_obj_list_by_id_list(sprite_id_list)
         sprite = _get_sprite_by_id(sprite_id)
 
@@ -292,8 +300,8 @@ class wrap_sprite():
         collided_sprite_id = wrap_base.sprite_id_manager.get_obj_id(collided_sprite)
         return collided_sprite_id
 
-    @classmethod
-    def sprites_collide_all(cls, sprite_id, sprite_id_list):
+    @staticmethod
+    def sprites_collide_all(sprite_id, sprite_id_list):
         sprite_list = wrap_base.sprite_id_manager.get_obj_list_by_id_list(sprite_id_list)
         sprite = wsu._get_sprite_by_id(sprite_id)
 
@@ -303,26 +311,28 @@ class wrap_sprite():
 
     ###################################################################################
     # methods related to sprites which was created from type
-    @classmethod
-    def change_sprite_costume(cls, id, costume_name, save_moving_angle=False, apply_proc_size=True):
+    @staticmethod
+    def change_sprite_costume(id, costume_name, save_moving_angle=False, apply_proc_size=True):
         sprite = wsu._get_sprite_by_id(id, Sprite_of_type)
         if hasattr(sprite, "set_costume"):
             sprite.set_costume(costume_name, save_moving_angle, apply_proc_size)
 
-    @classmethod
-    def set_next_costume(cls, id, save_moving_angle=False, apply_proc_size=True):
+    @staticmethod
+    def set_next_costume(id, save_moving_angle=False, apply_proc_size=True):
         sprite = _get_sprite_by_id(id, Sprite_of_type)
         if hasattr(sprite, "set_costume_by_offset"):
             sprite.set_costume_by_offset(1, save_moving_angle, apply_proc_size)
 
-    @classmethod
-    def set_previous_costume(cls, id, save_moving_angle=False, apply_proc_size=True):
+    @staticmethod
+    def set_previous_costume(id, save_moving_angle=False, apply_proc_size=True):
         sprite = wsu._get_sprite_by_id(id, Sprite_of_type)
         if hasattr(sprite, "set_costume_by_offset"):
             sprite.set_costume_by_offset(-1, save_moving_angle, apply_proc_size)
 
-    @classmethod
-    def get_sprite_costume(cls, id):
+    @staticmethod
+    def get_sprite_costume(id):
         sprite = wsu._get_sprite_by_id(id, Sprite_of_type)
         if hasattr(sprite, "get_sprite_costume"):
             return sprite.get_sprite_costume()
+
+cls = wrap_sprite

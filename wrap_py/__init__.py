@@ -82,3 +82,6 @@ def say_hi():
 
     print(_("Check this link to find sprites: ")+str(st.DATA_DOWNLOAD_URL))
 
+
+#auto-init with Thread mode
+init()
