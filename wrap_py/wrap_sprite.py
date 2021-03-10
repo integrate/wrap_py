@@ -291,7 +291,7 @@ class wrap_sprite():
     @staticmethod
     def sprites_collide_any(sprite_id, sprite_id_list):
         sprite_list = wrap_base.sprite_id_manager.get_obj_list_by_id_list(sprite_id_list)
-        sprite = _get_sprite_by_id(sprite_id)
+        sprite = wsu._get_sprite_by_id(sprite_id)
 
         manager = wrap_base.get_sprite_manager()
         collided_sprite = manager.sprite_collide_any(sprite, sprite_list)
@@ -319,7 +319,7 @@ class wrap_sprite():
 
     @staticmethod
     def set_next_costume(id, save_moving_angle=False, apply_proc_size=True):
-        sprite = _get_sprite_by_id(id, Sprite_of_type)
+        sprite = wsu._get_sprite_by_id(id, Sprite_of_type)
         if hasattr(sprite, "set_costume_by_offset"):
             sprite.set_costume_by_offset(1, save_moving_angle, apply_proc_size)
 

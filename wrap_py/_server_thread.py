@@ -18,8 +18,9 @@ def get_app_starter(callback_thread_id):
         app_broker.run_all_tasks()
         #no new frame until all callbacks finished
         while callback_broker.get_task_count()>0:
-            app_broker.run_all_tasks()
             wrap_base.app.do_frame(False)
+            app_broker.run_all_tasks()
+
 
 
     # run in App thread
@@ -31,9 +32,12 @@ def get_app_starter(callback_thread_id):
 #starter of Callback thread
 def callback_starter():
     broker = get_thread_broker()
+    task_added_condition = broker.get_task_list_changed_condition()
+
     while True:
+        with task_added_condition:
+            task_added_condition.wait_for( lambda : broker.get_task_count()>0 )
         broker.run_all_tasks(True)
-        time.sleep(1/100)
 
 
 def start_app_thread(interfaces_list, call_timeout=None):
