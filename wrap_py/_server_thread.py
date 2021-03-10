@@ -15,11 +15,26 @@ def get_app_starter(callback_thread_id):
         app_broker = get_thread_broker()
         callback_broker = get_thread_broker(callback_thread_id)
 
+        tl_changed = app_broker.get_any_task_list_changed_condition()
+
         app_broker.run_all_tasks()
+
         #no new frame until all callbacks finished
         while callback_broker.get_task_count()>0:
-            wrap_base.app.do_frame(False)
+
+            #wait for task list change
+            #timeout means that task takes to long to finish. It could be stopped by debugger. Then update screen.
+            with tl_changed:
+                res = tl_changed.wait_for(lambda: app_broker.get_task_count()>0 or callback_broker.get_task_count()==0, 0.1)
+
             app_broker.run_all_tasks()
+
+            #if timeout - renew screen
+            if not res:
+                wrap_base.app.do_frame(False)
+
+
+
 
 
 
@@ -35,8 +50,11 @@ def callback_starter():
     task_added_condition = broker.get_task_list_changed_condition()
 
     while True:
+
+        #release thread until task added
         with task_added_condition:
             task_added_condition.wait_for( lambda : broker.get_task_count()>0 )
+
         broker.run_all_tasks(True)
 
 
