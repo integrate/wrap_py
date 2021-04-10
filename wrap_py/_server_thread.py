@@ -43,10 +43,15 @@ def get_app_starter(callback_thread_id):
             # wait for all callbacks done or new task added to app
             # but not longer then time limit passed
             res = on_app_task_added_or_callback_tasks_done.wait(time_left/1000)
-            on_app_task_added_or_callback_tasks_done.clear()
 
-            #on timeout
-            if not res: continue
+            # on timeout
+            if not res:
+                continue
+            else:
+                # bug fixed. We only should clear event if it happened.
+                # it is possible that both timeout and event happened.
+                # Then we only should process either event or timeout. Not both.
+                on_app_task_added_or_callback_tasks_done.clear()
 
             #run all tasks if exists
             if not app_broker.empty():
