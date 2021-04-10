@@ -31,6 +31,7 @@ text_sprite = wrap_sprite_text.wrap_sprite_text
 from wrap_py._event_handler_registrator import *
 #actions
 from wrap_py.wrap_sprite_actions import wrap_sprite_actions as sprite_actions
+from wrap_py.wrap_sprite_actions_async import wrap_sprite_actions_async as async_actions
 
 # server types
 SERVER_TYPE_LOCAL = 1000
@@ -68,6 +69,7 @@ def init(server_type=SERVER_TYPE_THREAD):
 
     wrap_py._event_handler_registrator._reset_global_interfaces()
     wrap_py.wrap_sprite_actions._reset_global_interfaces()
+    wrap_py.wrap_sprite_actions_async._reset_global_interfaces()
     _initialized = True
 
 
