@@ -5,7 +5,7 @@ from wrap_engine.sprite_type_factory import Sprite_type_factory
 from wrap_engine.sprite_of_type import Sprite_of_type
 from wrap_engine.sprite_text import Sprite_text
 
-from wrap_py import wrap_base, settings
+from wrap_py import wrap_base, site
 
 from wrap_py import _wrap_sprite_utils as wsu
 
@@ -19,20 +19,25 @@ class wrap_sprite():
 
     @staticmethod
     def _prepare_sprite_type(sprite_type_name):
+
+        #check if exists
         if wrap_base.sprite_type_manager.has_sprite_type_name(sprite_type_name):
             return
 
-        st = Sprite_type_factory.create_sprite_type_from_file(sprite_type_name,
-                                                              settings.SPRITE_TYPES_PATH, False, False)
-        if not st:
-            st = Sprite_type_factory.create_sprite_type_from_file(sprite_type_name,
-                                                                  settings.SPRITE_TYPES_PATH_ALT, False, False)
+        #load from all possible paths
+        for base_path in site.path:
+            st = Sprite_type_factory.create_sprite_type_from_file(
+                sprite_type_name,
+                site.get_sprite_types_path(base_path), False, False)
 
-        if not st:
-            err = _("Sprite {sprite_type_name} loading failed!")
-            raise Exception(err.format(sprite_type_name=str(sprite_type_name)))
+            if st:
+                wrap_base.sprite_type_manager.add_sprite_type(st, sprite_type_name)
+                return
 
-        wrap_base.sprite_type_manager.add_sprite_type(st, sprite_type_name)
+        #not found
+        err = _("Sprite {sprite_type_name} loading failed!")
+        raise Exception(err.format(sprite_type_name=str(sprite_type_name)))
+
 
     @staticmethod
     def remove_sprite(id):
@@ -106,15 +111,20 @@ class wrap_sprite():
 
     @staticmethod
     def get_sprite_width_proc(id):
-        return wsu._get_sprite_by_id(id).get_width_proc()
+        val = wsu._get_sprite_by_id(id).get_width_proc()
+        return val if val is not None else 100
 
     @staticmethod
     def get_sprite_height_proc(id):
-        return wsu._get_sprite_by_id(id).get_height_proc()
+        val= wsu._get_sprite_by_id(id).get_height_proc()
+        return val if val is not None else 100
 
     @staticmethod
     def get_sprite_size_proc(id):
-        return wsu._get_sprite_by_id(id).get_size_proc()
+        val= wsu._get_sprite_by_id(id).get_size_proc()
+        val[0] = val[0] if val[0] is not None else 100
+        val[1] = val[1] if val[1] is not None else 100
+        return val
 
     @staticmethod
     def change_sprite_size_proc(id, width, height):
