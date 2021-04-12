@@ -50,6 +50,17 @@ class wrap_event():
     @staticmethod
     def register_event_handler(func, delay=None, count=0, pygame_event_type_filter_data=None, key_codes=None,
                             control_keys=None, mouse_buttons=None):
+        """
+
+        :param func:
+        :param delay:
+        :param count:
+        :param pygame_event_type_filter_data:  {pygame_event_attr: [pygame_event_attr_val], ...}
+        :param key_codes:
+        :param control_keys:
+        :param mouse_buttons:
+        :return:
+        """
         return _register_event_handler(func, delay, count, pygame_event_type_filter_data, key_codes,
                             control_keys, mouse_buttons)
 

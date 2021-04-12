@@ -12,7 +12,6 @@ def _reset_global_interfaces():
 
 
 class wrap_sprite_actions_async():
-    mult_fps = 100
 
     @staticmethod
     def _calc_values_by_percent(changing_kwargs: dict, percent):
@@ -39,9 +38,10 @@ class wrap_sprite_actions_async():
         return ch_kw
 
     @staticmethod
-    def _start_action_async(func, fixed_kwargs: dict, changing_kwargs: dict, time_ms: int, fps: int,
+    def _start_action(func, fixed_kwargs: dict, changing_kwargs: dict, time_ms: int, fps: int,
                             on_before_action=None, on_after_action=None,
-                            on_finished=None):
+                            on_finished=None,
+                            wait_for_finish=False, timeout=None):
         """
 
         :param func:
@@ -58,15 +58,13 @@ class wrap_sprite_actions_async():
 
         def _make_call(func, fixed_kwargs, ch_kw):
             """Tries to make call. Returns True if calls could be continued. False otherwise"""
-            nonlocal ch_kw_last
-
             # check we can do call
             if on_before_action is not None and not on_before_action(**fixed_kwargs, **ch_kw):
                 return False
 
             # make call and save last real used values
             func(**fixed_kwargs, **ch_kw)
-            ch_kw_last = dict(ch_kw)
+            # print(*ch_kw.values())
 
             # check if can continue
             if on_after_action is not None and not on_after_action(**fixed_kwargs, **ch_kw):
@@ -79,23 +77,25 @@ class wrap_sprite_actions_async():
             Stops notifications.
             Calls on_finish callback.
             """
-            nonlocal finished
 
-            finished = True
             event.stop_listening(event_id)
+            finished.set()
 
             if make_final_call:
                 ch_kw = cls._get_changing_kwargs(changing_kwargs, "stop")
                 _make_call(func, fixed_kwargs, ch_kw)
 
             if callable(on_finished):
-                on_finished(**fixed_kwargs, **ch_kw_last)
+                on_finished()
 
         def _action_callback(*args, **kwargs):
-            if finished: return
+            nonlocal current_time
+
+            if finished.is_set(): return
 
             # percent of time length passed
-            passed_percent = (time.time() - start_time) / time_length
+            current_time+=step_delay
+            passed_percent = (current_time - start_time) / time_length
 
             # if all time passed - nothing to do here
             if passed_percent >= 1:
@@ -116,48 +116,48 @@ class wrap_sprite_actions_async():
         end_time = start_time + time_length
 
         step_delay = 1 / fps
+        current_time = start_time
 
-        finished = False
-
-        # last values of call. Used for on_finished callback.
-        ch_kw_last = cls._get_changing_kwargs(changing_kwargs, "start")
+        finished = threading.Event()
 
         event_id = event.register_event_handler(_action_callback, int(step_delay * 1000))
 
-    @staticmethod
-    def _start_action(func, fixed_kwargs: dict, changing_kwargs: dict, time_ms: int, fps: int,
-                      on_before_action=None, on_after_action=None, on_finished=None,
-                      wait_for_finish=False, timeout=None):
+        if wait_for_finish:
+            finished.wait(timeout)
 
-        # start in async mode and finish
-        if not wait_for_finish:
-            cls._start_action_async(func, fixed_kwargs, changing_kwargs, time_ms, fps,
-                                    on_before_action, on_after_action, on_finished)
-            return
-
-        # sync mode
-
-        def when_finished(*args, **kwargs):
-            """Processes on_finish event.
-                Calls original callback and unfroze this method from waiting.
-            """
-            if callable(on_finished):
-                on_finished(*args, **kwargs)
-
-            ev.set()
-
-        ev = threading.Event()
-        ev.clear()
-
-        cls._start_action_async(func, fixed_kwargs, changing_kwargs, time_ms, fps,
-                                on_before_action, on_after_action, when_finished)
-
-        # wait for end of actions
-        return ev.wait(timeout)
+    # @staticmethod
+    # def _start_action(func, fixed_kwargs: dict, changing_kwargs: dict, time_ms: int, fps: int,
+    #                   on_before_action=None, on_after_action=None, on_finished=None,
+    #                   wait_for_finish=False, timeout=None):
+    #
+    #     # start in async mode and finish
+    #     if not wait_for_finish:
+    #         cls._start_action_async(func, fixed_kwargs, changing_kwargs, time_ms, fps,
+    #                                 on_before_action, on_after_action, on_finished)
+    #         return
+    #
+    #     # sync mode
+    #
+    #     def when_finished(*args, **kwargs):
+    #         """Processes on_finish event.
+    #             Calls original callback and unfroze this method from waiting.
+    #         """
+    #         if callable(on_finished):
+    #             on_finished(*args, **kwargs)
+    #
+    #         ev.set()
+    #
+    #     ev = threading.Event()
+    #
+    #     cls._start_action_async(func, fixed_kwargs, changing_kwargs, time_ms, fps,
+    #                             on_before_action, on_after_action, when_finished)
+    #
+    #     # wait for end of actions
+    #     return ev.wait(timeout)
 
     @staticmethod
     def change_sprite_size(id, time_ms, width, height, on_before_action=None, on_after_action=None, on_finished=None,
-                           wait_for_finish=False, timeout=None):
+                           wait_for_finish=False, timeout=None, fps=100):
         start_width, start_height = sprite.get_sprite_size(id)
 
         f = sprite.change_sprite_size
@@ -166,13 +166,13 @@ class wrap_sprite_actions_async():
             "width": {"start": start_width, "stop": width},
             "height": {"start": start_height, "stop": height}
         }
-        cls._start_action(f, fixkw, chkw, time_ms, cls.mult_fps,
+        cls._start_action(f, fixkw, chkw, time_ms, fps,
                           on_before_action, on_after_action, on_finished,
                           wait_for_finish, timeout)
 
     @staticmethod
     def change_sprite_width(id, time_ms, width, on_before_action=None, on_after_action=None, on_finished=None,
-                            wait_for_finish=False, timeout=None):
+                            wait_for_finish=False, timeout=None, fps=100):
         start_width = sprite.get_sprite_width(id)
 
         f = sprite.change_sprite_width
@@ -180,13 +180,13 @@ class wrap_sprite_actions_async():
         chkw = {
             "width": {"start": start_width, "stop": width}
         }
-        cls._start_action(f, fixkw, chkw, time_ms, cls.mult_fps,
+        cls._start_action(f, fixkw, chkw, time_ms, fps,
                           on_before_action, on_after_action, on_finished,
                           wait_for_finish, timeout)
 
     @staticmethod
     def change_sprite_height(id, time_ms, height, on_before_action=None, on_after_action=None, on_finished=None,
-                             wait_for_finish=False, timeout=None):
+                             wait_for_finish=False, timeout=None, fps=100):
         start_height = sprite.get_sprite_height(id)
 
         f = sprite.change_sprite_height
@@ -195,14 +195,14 @@ class wrap_sprite_actions_async():
             "height": {"start": start_height, "stop": height}
         }
         cls._start_action(
-            f, fixkw, chkw, time_ms, cls.mult_fps,
+            f, fixkw, chkw, time_ms, fps,
             on_before_action, on_after_action, on_finished,
             wait_for_finish, timeout)
 
     @staticmethod
     def change_width_proportionally(id, time_ms, width, from_modified=False,
                                     on_before_action=None, on_after_action=None, on_finished=None,
-                                    wait_for_finish=False, timeout=None):
+                                    wait_for_finish=False, timeout=None, fps=100):
         cls._start_action(
             sprite.change_width_proportionally,
             {"id": id,
@@ -212,7 +212,7 @@ class wrap_sprite_actions_async():
             {"width":
                  {"start": sprite.get_sprite_width(id), "stop": width}
              },
-            time_ms, cls.mult_fps,
+            time_ms, fps,
 
             on_before_action, on_after_action, on_finished,
             wait_for_finish, timeout)
@@ -220,7 +220,7 @@ class wrap_sprite_actions_async():
     @staticmethod
     def change_height_proportionally(id, time_ms, height, from_modified=False, on_before_action=None,
                                      on_after_action=None, on_finished=None,
-                                     wait_for_finish=False, timeout=None):
+                                     wait_for_finish=False, timeout=None, fps=100):
         cls._start_action(
             sprite.change_height_proportionally,
             {"id": id,
@@ -230,7 +230,7 @@ class wrap_sprite_actions_async():
             {"height":
                  {"start": sprite.get_sprite_height(id), "stop": height}
              },
-            time_ms, cls.mult_fps,
+            time_ms, fps,
 
             on_before_action, on_after_action, on_finished,
             wait_for_finish, timeout)
@@ -238,7 +238,7 @@ class wrap_sprite_actions_async():
     @staticmethod
     def change_sprite_size_proc(id, time_ms, width, height, on_before_action=None, on_after_action=None,
                                 on_finished=None,
-                                wait_for_finish=False, timeout=None):
+                                wait_for_finish=False, timeout=None, fps=100):
         startw = sprite.get_sprite_width_proc(id)
         startw = startw if startw is not None else 100
 
@@ -254,7 +254,7 @@ class wrap_sprite_actions_async():
              "height":
                  {"start": starth, "stop": height}
              },
-            time_ms, cls.mult_fps,
+            time_ms, fps,
 
             on_before_action, on_after_action, on_finished,
             wait_for_finish, timeout)
@@ -262,7 +262,7 @@ class wrap_sprite_actions_async():
     @staticmethod
     def change_sprite_width_proc(id, time_ms, width, on_before_action=None, on_after_action=None,
                                  on_finished=None,
-                                 wait_for_finish=False, timeout=None):
+                                 wait_for_finish=False, timeout=None, fps=100):
         startw = sprite.get_sprite_width_proc(id)
         startw = startw if startw is not None else 100
 
@@ -271,7 +271,7 @@ class wrap_sprite_actions_async():
             {"id": id},
 
             {"width": {"start": startw, "stop": width}},
-            time_ms, cls.mult_fps,
+            time_ms, fps,
 
             on_before_action, on_after_action, on_finished,
             wait_for_finish, timeout)
@@ -279,7 +279,7 @@ class wrap_sprite_actions_async():
     @staticmethod
     def change_sprite_height_proc(id, time_ms, height, on_before_action=None, on_after_action=None,
                                   on_finished=None,
-                                  wait_for_finish=False, timeout=None):
+                                  wait_for_finish=False, timeout=None, fps=100):
         starth = sprite.get_sprite_height_proc(id)
         starth = starth if starth is not None else 100
 
@@ -290,7 +290,7 @@ class wrap_sprite_actions_async():
             {"height":
                  {"start": starth, "stop": height}
              },
-            time_ms, cls.mult_fps,
+            time_ms, fps,
 
             on_before_action, on_after_action, on_finished,
             wait_for_finish, timeout)
@@ -298,7 +298,7 @@ class wrap_sprite_actions_async():
     @staticmethod
     def set_sprite_angle(id, time_ms, angle, on_before_action=None, on_after_action=None,
                          on_finished=None,
-                         wait_for_finish=False, timeout=None):
+                         wait_for_finish=False, timeout=None, fps=100):
         cls._start_action(
             sprite.set_sprite_angle,
             {"id": id},
@@ -306,7 +306,7 @@ class wrap_sprite_actions_async():
             {"angle":
                  {"start": sprite.get_sprite_angle(id), "stop": angle}
              },
-            time_ms, cls.mult_fps,
+            time_ms, fps,
 
             on_before_action, on_after_action, on_finished,
             wait_for_finish, timeout)
@@ -314,7 +314,7 @@ class wrap_sprite_actions_async():
     @staticmethod
     def move_sprite_to(id, time_ms, x, y, on_before_action=None, on_after_action=None,
                        on_finished=None,
-                       wait_for_finish=False, timeout=None):
+                       wait_for_finish=False, timeout=None, fps=100):
         start_x, start_y = sprite.get_sprite_pos(id)
         cls._start_action(
             sprite.move_sprite_to,
@@ -323,7 +323,7 @@ class wrap_sprite_actions_async():
             {"x": {"start": start_x, "stop": x},
              "y": {"start": start_y, "stop": y}
              },
-            time_ms, cls.mult_fps,
+            time_ms, fps,
 
             on_before_action, on_after_action, on_finished,
             wait_for_finish, timeout)
@@ -331,8 +331,7 @@ class wrap_sprite_actions_async():
     @staticmethod
     def move_sprite_by(id, time_ms, dx, dy,
                        on_before_action=None, on_after_action=None, on_finished=None,
-                       wait_for_finish=False, timeout=None
-                       ):
+                       wait_for_finish=False, timeout=None, fps=100):
         start_x, start_y = sprite.get_sprite_pos(id)
         cls._start_action(
             sprite.move_sprite_to,
@@ -341,7 +340,7 @@ class wrap_sprite_actions_async():
             {"x": {"start": start_x, "stop": start_x + dx},
              "y": {"start": start_y, "stop": start_y + dy}
              },
-            time_ms, cls.mult_fps,
+            time_ms, fps,
 
             on_before_action, on_after_action, on_finished,
             wait_for_finish, timeout)
@@ -349,14 +348,14 @@ class wrap_sprite_actions_async():
     @staticmethod
     def set_left_to(id, time_ms, left, on_before_action=None, on_after_action=None,
                     on_finished=None,
-                    wait_for_finish=False, timeout=None):
+                    wait_for_finish=False, timeout=None, fps=100):
         cls._start_action(
             sprite.set_left_to,
             {"id": id},
 
             {"left": {"start": sprite.get_left(id), "stop": left}
              },
-            time_ms, cls.mult_fps,
+            time_ms, fps,
 
             on_before_action, on_after_action, on_finished,
             wait_for_finish, timeout)
@@ -364,14 +363,14 @@ class wrap_sprite_actions_async():
     @staticmethod
     def set_right_to(id, time_ms, right, on_before_action=None, on_after_action=None,
                      on_finished=None,
-                     wait_for_finish=False, timeout=None):
+                     wait_for_finish=False, timeout=None, fps=100):
         cls._start_action(
             sprite.set_right_to,
             {"id": id},
 
             {"right": {"start": sprite.get_right(id), "stop": right}
              },
-            time_ms, cls.mult_fps,
+            time_ms, fps,
 
             on_before_action, on_after_action, on_finished,
             wait_for_finish, timeout)
@@ -379,14 +378,14 @@ class wrap_sprite_actions_async():
     @staticmethod
     def set_top_to(id, time_ms, top, on_before_action=None, on_after_action=None,
                    on_finished=None,
-                   wait_for_finish=False, timeout=None):
+                   wait_for_finish=False, timeout=None, fps=100):
         cls._start_action(
             sprite.set_top_to,
             {"id": id},
 
             {"top": {"start": sprite.get_top(id), "stop": top}
              },
-            time_ms, cls.mult_fps,
+            time_ms, fps,
 
             on_before_action, on_after_action, on_finished,
             wait_for_finish, timeout)
@@ -394,14 +393,14 @@ class wrap_sprite_actions_async():
     @staticmethod
     def set_bottom_to(id, time_ms, bottom, on_before_action=None, on_after_action=None,
                       on_finished=None,
-                      wait_for_finish=False, timeout=None):
+                      wait_for_finish=False, timeout=None, fps=100):
         cls._start_action(
             sprite.set_bottom_to,
             {"id": id},
 
             {"bottom": {"start": sprite.get_bottom(id), "stop": bottom}
              },
-            time_ms, cls.mult_fps,
+            time_ms, fps,
 
             on_before_action, on_after_action, on_finished,
             wait_for_finish, timeout)
@@ -409,14 +408,14 @@ class wrap_sprite_actions_async():
     @staticmethod
     def set_centerx_to(id, time_ms, centerx, on_before_action=None, on_after_action=None,
                        on_finished=None,
-                       wait_for_finish=False, timeout=None):
+                       wait_for_finish=False, timeout=None, fps=100):
         cls._start_action(
             sprite.set_centerx_to,
             {"id": id},
 
             {"centerx": {"start": sprite.get_centerx(id), "stop": centerx}
              },
-            time_ms, cls.mult_fps,
+            time_ms, fps,
 
             on_before_action, on_after_action, on_finished,
             wait_for_finish, timeout)
@@ -424,14 +423,14 @@ class wrap_sprite_actions_async():
     @staticmethod
     def set_centery_to(id, time_ms, centery, on_before_action=None, on_after_action=None,
                        on_finished=None,
-                       wait_for_finish=False, timeout=None):
+                       wait_for_finish=False, timeout=None, fps=100):
         cls._start_action(
             sprite.set_centery_to,
             {"id": id},
 
             {"centery": {"start": sprite.get_centery(id), "stop": centery}
              },
-            time_ms, cls.mult_fps,
+            time_ms, fps,
 
             on_before_action, on_after_action, on_finished,
             wait_for_finish, timeout)
@@ -439,7 +438,7 @@ class wrap_sprite_actions_async():
     @staticmethod
     def move_sprite_at_angle(id, time_ms, angle, distance, on_before_action=None, on_after_action=None,
                              on_finished=None,
-                             wait_for_finish=False, timeout=None):
+                             wait_for_finish=False, timeout=None, fps=100):
         start_x, start_y = sprite.get_sprite_pos(id)
         x, y = sprite.calc_point_by_angle_and_distance(id, angle, distance)
         cls._start_action(
@@ -449,7 +448,7 @@ class wrap_sprite_actions_async():
             {"x": {"start": start_x, "stop": x},
              "y": {"start": start_y, "stop": y}
              },
-            time_ms, cls.mult_fps,
+            time_ms, fps,
 
             on_before_action, on_after_action, on_finished,
             wait_for_finish, timeout)
@@ -457,7 +456,7 @@ class wrap_sprite_actions_async():
     @staticmethod
     def move_sprite_to_angle(id, time_ms, distance, on_before_action=None, on_after_action=None,
                              on_finished=None,
-                             wait_for_finish=False, timeout=None):
+                             wait_for_finish=False, timeout=None, fps=100):
         start_x, start_y = sprite.get_sprite_pos(id)
         angle = sprite.get_sprite_final_angle(id)
         x, y = sprite.calc_point_by_angle_and_distance(id, angle, distance)
@@ -468,7 +467,7 @@ class wrap_sprite_actions_async():
             {"x": {"start": start_x, "stop": x},
              "y": {"start": start_y, "stop": y}
              },
-            time_ms, cls.mult_fps,
+            time_ms, fps,
 
             on_before_action, on_after_action, on_finished,
             wait_for_finish, timeout)
@@ -476,7 +475,7 @@ class wrap_sprite_actions_async():
     @staticmethod
     def move_sprite_to_point(id, time_ms, x, y, distance, on_before_action=None, on_after_action=None,
                              on_finished=None,
-                             wait_for_finish=False, timeout=None):
+                             wait_for_finish=False, timeout=None, fps=100):
         start_x, start_y = sprite.get_sprite_pos(id)
         angle = sprite.calc_angle_by_point(id, [x, y])
         if angle is None:
@@ -490,7 +489,7 @@ class wrap_sprite_actions_async():
             {"x": {"start": start_x, "stop": x},
              "y": {"start": start_y, "stop": y}
              },
-            time_ms, cls.mult_fps,
+            time_ms, fps,
 
             on_before_action, on_after_action, on_finished,
             wait_for_finish, timeout)
@@ -498,7 +497,7 @@ class wrap_sprite_actions_async():
     @staticmethod
     def rotate_to_angle(id, time_ms, angle_to_look_to, on_before_action=None, on_after_action=None,
                         on_finished=None,
-                        wait_for_finish=False, timeout=None):
+                        wait_for_finish=False, timeout=None, fps=100):
         angle_modif = sprite.calc_angle_modification_by_angle(id, angle_to_look_to)
 
         cls._start_action(
@@ -508,7 +507,7 @@ class wrap_sprite_actions_async():
             {"angle":
                  {"start": sprite.get_sprite_angle(id), "stop": angle_modif}
              },
-            time_ms, cls.mult_fps,
+            time_ms, fps,
 
             on_before_action, on_after_action, on_finished,
             wait_for_finish, timeout)
@@ -516,7 +515,7 @@ class wrap_sprite_actions_async():
     @staticmethod
     def rotate_to_point(id, time_ms, x, y, on_before_action=None, on_after_action=None,
                         on_finished=None,
-                        wait_for_finish=False, timeout=None):
+                        wait_for_finish=False, timeout=None, fps=100):
         angle_to_look_to = sprite.calc_angle_by_point(id, [x, y])
         if angle_to_look_to is None:
             return
@@ -530,10 +529,15 @@ class wrap_sprite_actions_async():
             {"angle":
                  {"start": sprite.get_sprite_angle(id), "stop": angle_modif}
              },
-            time_ms, cls.mult_fps,
+            time_ms, fps,
 
             on_before_action, on_after_action, on_finished,
             wait_for_finish, timeout)
+
+    @staticmethod
+    def wait(time_ms, fps=30):
+        def a():return
+        cls._start_action(a, {}, {}, time_ms, fps, wait_for_finish=True)
 
 
 cls = wrap_sprite_actions_async
