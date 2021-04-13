@@ -3,9 +3,9 @@ from wrap_py import  wrap_base
 class wrap_world():
 
     @staticmethod
-    def create_world(width:int, height:int):
+    def create_world(width:int, height:int, start_pos_x:int = None, start_pos_y:int = None):
         """Creates screen with given sizes"""
-        wrap_base.world.create_world(width, height)
+        wrap_base.world.create_world(width, height, start_pos_x, start_pos_y)
 
     @staticmethod
     def change_world(width, height):
