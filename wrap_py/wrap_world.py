@@ -22,3 +22,7 @@ class wrap_world():
     @staticmethod
     def set_world_background_image(path_to_file, fill=False):
         wrap_base.world.set_world_background_image(path_to_file, fill)
+
+    @staticmethod
+    def clear_world_background_image():
+        wrap_base.world.set_world_background_image(None)
