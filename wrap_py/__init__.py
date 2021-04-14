@@ -71,19 +71,3 @@ def init(server_type=SERVER_TYPE_THREAD):
     wrap_py.wrap_sprite_actions._reset_global_interfaces()
     # wrap_py.wrap_sprite_actions_async._reset_global_interfaces()
     _initialized = True
-
-
-
-from wrap_py import settings as st
-
-def say_hi():
-    print()
-    print(_("Wrap_py uses these catalogs: "))
-    print(st.DATA_PATH)
-    print(st.DATA_PATH_ALT)
-
-    print(_("Check this link to find sprites: ")+str(st.DATA_DOWNLOAD_URL))
-
-
-#auto-init with Thread mode
-init()
