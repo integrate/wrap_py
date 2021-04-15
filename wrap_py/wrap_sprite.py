@@ -13,6 +13,9 @@ from wrap_py import _wrap_sprite_utils as wsu
 class wrap_sprite():
     @staticmethod
     def _register_sprite(sprite):
+        if wrap_base.world.sprite_manager is None:
+            raise Exception(_("Can not add sprite without window"))
+
         id = wrap_base.sprite_id_manager.add_object(sprite)
         wrap_base.world.sprite_manager.add_image_sprite(sprite)
         return id
