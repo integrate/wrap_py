@@ -5,7 +5,7 @@ from wrap_engine.sprite_type_factory import Sprite_type_factory
 from wrap_engine.sprite_of_type import Sprite_of_type
 from wrap_engine.sprite_text import Sprite_text
 
-from wrap_py import wrap_base, site
+from wrap_py import wrap_base, site, settings
 
 from wrap_py import _wrap_sprite_utils as wsu
 
@@ -24,11 +24,9 @@ class wrap_sprite():
         if wrap_base.sprite_type_manager.has_sprite_type_name(sprite_type_name):
             return
 
-        #load from all possible paths
-        for base_path in site.path:
-            st = Sprite_type_factory.create_sprite_type_from_file(
-                sprite_type_name,
-                site.get_sprite_types_path(base_path), False, False)
+        #load from all installed sources
+        for ds in site.sprite_data_sources:
+            st = Sprite_type_factory.create_sprite_type_from_data_source(sprite_type_name, ds, site.sprite_data_preload)
 
             if st:
                 wrap_base.sprite_type_manager.add_sprite_type(st, sprite_type_name)

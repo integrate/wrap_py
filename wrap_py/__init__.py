@@ -1,13 +1,7 @@
+import os, sys, threading
+
 # disable pygame Hello message
-import os
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
-
-# set custom error handling
-import sys, threading
-from wrap_py import _error_handling
-
-sys.excepthook = _error_handling.python_error_hook
-threading.excepthook = _error_handling.threading_error_hook
 
 # load pygame constants to use directly
 from pygame.locals import *
@@ -27,6 +21,9 @@ event = wrap_event.wrap_event
 sprite = wrap_sprite.wrap_sprite
 text_sprite = wrap_sprite_text.wrap_sprite_text
 
+#other service modules available for outer usage
+from wrap_py import settings, site
+
 # easy registration of event handlers
 from wrap_py._event_handler_registrator import *
 #actions
@@ -36,6 +33,12 @@ from wrap_py.wrap_sprite_actions import wrap_sprite_actions as sprite_actions
 # server types
 SERVER_TYPE_LOCAL = 1000
 SERVER_TYPE_THREAD = 1001
+
+#turn on nice error putput
+def make_nice_errors():
+    from wrap_py import _error_handling
+    sys.excepthook = _error_handling.python_error_hook
+    threading.excepthook = _error_handling.threading_error_hook
 
 # reset local modules by remote
 _initialized = False
@@ -71,3 +74,6 @@ def init(server_type=SERVER_TYPE_THREAD):
     wrap_py.wrap_sprite_actions._reset_global_interfaces()
     # wrap_py.wrap_sprite_actions_async._reset_global_interfaces()
     _initialized = True
+
+def is_initialized():
+    return _initialized
