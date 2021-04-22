@@ -106,19 +106,20 @@ class wrap_sprite():
 
     @staticmethod
     def get_sprite_width_proc(id):
-        return wsu._get_sprite_by_id(id).get_width_proc()
+        val = wsu._get_sprite_by_id(id).get_width_proc()
+        return val if val is not None else 100
 
     @staticmethod
     def get_sprite_height_proc(id):
-        return wsu._get_sprite_by_id(id).get_height_proc()
+        val = wsu._get_sprite_by_id(id).get_height_proc()
+        return val if val is not None else 100
 
     @staticmethod
     def get_sprite_size_proc(id):
-        return wsu._get_sprite_by_id(id).get_size_proc()
-
-    @staticmethod
-    def change_sprite_size_proc(id, width, height):
-        wsu._get_sprite_by_id(id).change_size_proc(int(width), int(height))
+        val = wsu._get_sprite_by_id(id).get_size_proc()
+        val[0] = val[0] if val[0] is not None else 100
+        val[1] = val[1] if val[1] is not None else 100
+        return val
 
     @staticmethod
     def change_sprite_width_proc(id, width):

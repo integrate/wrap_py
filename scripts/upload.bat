@@ -1,5 +1,5 @@
 set base_dir=%~dp0..
-set ver=0.1.11.3
+set ver=0.1.12.1
 
 set twine=%base_dir%\venv\scripts\twine.exe
 set ver_name=%base_dir%\dist\wrap_py-%ver%-py3-none-any.whl
