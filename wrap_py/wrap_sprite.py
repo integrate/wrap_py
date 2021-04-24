@@ -48,7 +48,7 @@ class wrap_sprite():
 
     @staticmethod
     def sprite_exists(id):
-        obj = wrap_base.sprite_id_manager.get_obj_id(id)
+        obj = wrap_base.sprite_id_manager.get_obj_by_id(id)
         return obj is not None
 
     @staticmethod
@@ -165,10 +165,18 @@ class wrap_sprite():
 
     @staticmethod
     def get_sprite_angle(id):
+        """
+        Returns modification of sprite original angle.
+        0 means that sprite original angle was not modified.
+        """
         return wsu._get_sprite_by_id(id).get_angle_modification()
 
     @staticmethod
     def get_sprite_final_angle(id):
+        """
+        Returns real applied sprite angle.
+        Equals original sprite angle plus applied angle modification.
+        """
         return wsu._get_sprite_by_id(id).get_final_angle()
 
     @staticmethod
