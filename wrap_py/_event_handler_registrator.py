@@ -42,6 +42,7 @@ def on_key_down(orig_func_or_key=None, *other_keys):
 
     return on_key_handler
 
+
 def on_key_up(orig_func_or_key=None, *other_keys):
     keys = None
 
@@ -60,6 +61,7 @@ def on_key_up(orig_func_or_key=None, *other_keys):
 
     return on_key_handler
 
+
 def on_key_always(*keys, delay=50):
     keys = [*keys]
 
@@ -77,6 +79,7 @@ def on_mouse_left(orig_func):
     event.register_event_handler(orig_func, pygame_event_type_filter_data=filter)
     return orig_func
 
+
 def on_mouse_right(orig_func):
     filter = {'type': wrap_py.MOUSEBUTTONDOWN}
     filter['button'] = 3
@@ -84,10 +87,12 @@ def on_mouse_right(orig_func):
     event.register_event_handler(orig_func, pygame_event_type_filter_data=filter)
     return orig_func
 
+
 def on_mouse_move(orig_func):
     filter = {'type': wrap_py.MOUSEMOTION}
     event.register_event_handler(orig_func, pygame_event_type_filter_data=filter)
     return orig_func
+
 
 def on_mouse_down(orig_func_or_button=None, *other_buttons):
     buttons = None
@@ -107,6 +112,7 @@ def on_mouse_down(orig_func_or_button=None, *other_buttons):
 
     return on_button_handler
 
+
 def on_mouse_up(orig_func_or_button=None, *other_buttons):
     buttons = None
 
@@ -124,6 +130,7 @@ def on_mouse_up(orig_func_or_button=None, *other_buttons):
         buttons = [orig_func_or_button, *other_buttons]
 
     return on_button_handler
+
 
 def on_close(orig_func):
     event.on_close(orig_func)

@@ -78,6 +78,11 @@ class wrap_sprite_text():
         return sprite.change_data(text_color=text_color)
 
     @staticmethod
+    def set_text_color_rgb(id, r, g, b):
+        sprite = wsu._get_sprite_by_id(id, Sprite_text)
+        return sprite.change_data(text_color=[r, g, b])
+
+    @staticmethod
     def get_back_color(id):
         sprite = wsu._get_sprite_by_id(id, Sprite_text)
         return sprite.get_back_color()
@@ -86,6 +91,16 @@ class wrap_sprite_text():
     def set_back_color(id, back_color):
         sprite = wsu._get_sprite_by_id(id, Sprite_text)
         return sprite.change_back_color(back_color)
+
+    @staticmethod
+    def set_back_color_rgb(id, r, g, b):
+        sprite = wsu._get_sprite_by_id(id, Sprite_text)
+        return sprite.change_back_color([r, g, b])
+
+    @staticmethod
+    def clean_back_color(id):
+        sprite = wsu._get_sprite_by_id(id, Sprite_text)
+        return sprite.change_back_color(None)
 
     @staticmethod
     def get_pos(id):

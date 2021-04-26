@@ -268,6 +268,10 @@ class wrap_sprite():
         return wsu._get_sprite_by_id(id).calc_angle_by_point(point)
 
     @staticmethod
+    def calc_angle_by_point_xy(id, x, y):
+        return wsu._get_sprite_by_id(id).calc_angle_by_point([x, y])
+
+    @staticmethod
     def calc_angle_modification_by_angle(id, angle_to_look_to):
         return wsu._get_sprite_by_id(id).calc_angle_modification_by_angle(angle_to_look_to)
 
@@ -296,16 +300,16 @@ class wrap_sprite():
     def sprite_collide_point(id, x, y, use_rect = False):
         sp = wsu._get_sprite_by_id(id)
         if use_rect:
-            return sp.collide_point_rect(x, y)
+            return bool(sp.collide_point_rect(x, y))
         else:
-            return sp.collide_point_mask(x, y)
+            return bool(sp.collide_point_mask(x, y))
 
     @staticmethod
     def sprites_collide(id1, id2):
         sp1 = wsu._get_sprite_by_id(id1)
         sp2 = wsu._get_sprite_by_id(id2)
         manager = wrap_base.get_sprite_manager()
-        return manager.sprites_collide(sp1, sp2)
+        return bool(manager.sprites_collide(sp1, sp2))
 
     @staticmethod
     def sprites_collide_any(sprite_id, sprite_id_list):
