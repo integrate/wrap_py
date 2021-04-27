@@ -1,3 +1,4 @@
+import pygame
 import wrap_py
 from wrap_py._transl import translator as _
 
@@ -72,26 +73,44 @@ def on_key_always(*keys, delay=50):
     return on_key_handler
 
 
-def on_mouse_left(orig_func):
-    filter = {'type': wrap_py.MOUSEBUTTONDOWN}
-    filter['button'] = 1
+def on_mouse_left(orig_func_or_none=None):
+    def on_mouse_left_handler(orig_func):
+        filter = {'type': wrap_py.MOUSEBUTTONDOWN}
+        filter['button'] = pygame.BUTTON_LEFT
 
-    event.register_event_handler(orig_func, pygame_event_type_filter_data=filter)
-    return orig_func
+        event.register_event_handler(orig_func, pygame_event_type_filter_data=filter)
+        return orig_func
 
-
-def on_mouse_right(orig_func):
-    filter = {'type': wrap_py.MOUSEBUTTONDOWN}
-    filter['button'] = 3
-
-    event.register_event_handler(orig_func, pygame_event_type_filter_data=filter)
-    return orig_func
+    if callable(orig_func_or_none):
+        return on_mouse_left_handler(orig_func_or_none)
+    else:
+        return on_mouse_left_handler
 
 
-def on_mouse_move(orig_func):
-    filter = {'type': wrap_py.MOUSEMOTION}
-    event.register_event_handler(orig_func, pygame_event_type_filter_data=filter)
-    return orig_func
+def on_mouse_right(orig_func_or_none=None):
+    def on_mouse_right_handler(orig_func):
+        filter = {'type': wrap_py.MOUSEBUTTONDOWN}
+        filter['button'] = pygame.BUTTON_RIGHT
+
+        event.register_event_handler(orig_func, pygame_event_type_filter_data=filter)
+        return orig_func
+
+    if callable(orig_func_or_none):
+        return on_mouse_right_handler(orig_func_or_none)
+    else:
+        return on_mouse_right_handler
+
+
+def on_mouse_move(orig_func_or_none=None):
+    def on_move_handler(orig_func):
+        filter = {'type': wrap_py.MOUSEMOTION}
+        event.register_event_handler(orig_func, pygame_event_type_filter_data=filter)
+        return orig_func
+
+    if callable(orig_func_or_none):
+        return on_move_handler(orig_func_or_none)
+    else:
+        return on_move_handler
 
 
 def on_mouse_down(orig_func_or_button=None, *other_buttons):
@@ -132,6 +151,12 @@ def on_mouse_up(orig_func_or_button=None, *other_buttons):
     return on_button_handler
 
 
-def on_close(orig_func):
-    event.on_close(orig_func)
-    return orig_func
+def on_close(orig_func_or_none=None):
+    def on_close_handler(orig_func):
+        event.on_close(orig_func)
+        return orig_func
+
+    if callable(orig_func_or_none):
+        return on_close_handler(orig_func_or_none)
+    else:
+        return on_close_handler
