@@ -122,6 +122,10 @@ class wrap_sprite():
         return val
 
     @staticmethod
+    def change_sprite_size_proc(id, width, height):
+        wsu._get_sprite_by_id(id).change_size_proc(int(width), int(height))
+
+    @staticmethod
     def change_sprite_width_proc(id, width):
         wsu._get_sprite_by_id(id).change_width_proc(width)
 
