@@ -265,10 +265,16 @@ class wrap_sprite():
 
     @staticmethod
     def calc_angle_by_point(id, point):
+        """
+        Returns None if sprite is already on that point.
+        """
         return wsu._get_sprite_by_id(id).calc_angle_by_point(point)
 
     @staticmethod
     def calc_angle_by_point_xy(id, x, y):
+        """
+        Returns None if sprite is already on that point.
+        """
         return wsu._get_sprite_by_id(id).calc_angle_by_point([x, y])
 
     @staticmethod
